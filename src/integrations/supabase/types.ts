@@ -238,6 +238,13 @@ export type Database = {
             referencedRelation: "races"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "race_predictions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       races: {

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-import { Flag, Share2, Facebook, Twitter, Send } from "lucide-react";
+import { Flag, Share2, Facebook, Twitter, Send, RotateCcw } from "lucide-react";
 import { drivers } from "@/data/drivers";
 import {
   DndContext,
@@ -12,6 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { addHours, isBefore } from "date-fns";
 
 export const RacePrediction = () => {
   const { toast } = useToast();
@@ -25,6 +26,30 @@ export const RacePrediction = () => {
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [selectingPole, setSelectingPole] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nextRace, setNextRace] = useState<{ race_date: string; race_time: string } | null>(null);
+  const [canReset, setCanReset] = useState(false);
+
+  useEffect(() => {
+    const fetchNextRace = async () => {
+      const { data: race, error } = await supabase
+        .from('races')
+        .select('race_date, race_time')
+        .eq('status', 'scheduled')
+        .order('race_date', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (race) {
+        setNextRace(race);
+        const raceDateTime = new Date(`${race.race_date}T${race.race_time}`);
+        const now = new Date();
+        const twentyFourHoursBefore = addHours(raceDateTime, -24);
+        setCanReset(isBefore(now, twentyFourHoursBefore));
+      }
+    };
+
+    fetchNextRace();
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -93,6 +118,98 @@ export const RacePrediction = () => {
       toast({
         title: "¡Piloto seleccionado!",
         description: `${drivers.find(d => d.id === driverId)?.name} en posición ${selectedPosition}`,
+      });
+    }
+  };
+
+  const handleReset = async () => {
+    try {
+      if (!nextRace) {
+        toast({
+          title: "Error",
+          description: "No hay carreras programadas",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const raceDateTime = new Date(`${nextRace.race_date}T${nextRace.race_time}`);
+      const now = new Date();
+      const twentyFourHoursBefore = addHours(raceDateTime, -24);
+
+      if (!isBefore(now, twentyFourHoursBefore)) {
+        toast({
+          title: "Error",
+          description: "Solo puedes resetear tu predicción hasta 24 horas antes de la carrera",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para resetear predicciones",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Obtener la carrera activa
+      const { data: races, error: raceError } = await supabase
+        .from('races')
+        .select('id')
+        .eq('status', 'scheduled')
+        .order('race_date', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (raceError || !races) {
+        toast({
+          title: "Error",
+          description: "No hay carreras programadas en este momento",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Eliminar la predicción existente
+      const { error: deleteError } = await supabase
+        .from('race_predictions')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('race_id', races.id);
+
+      if (deleteError) {
+        toast({
+          title: "Error",
+          description: "Error al resetear la predicción",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Resetear el estado local
+      setPredictions({
+        podium: [],
+        pole: null,
+        rain: false,
+        dnf: false,
+        safetyCar: false,
+      });
+
+      toast({
+        title: "¡Predicción reseteada!",
+        description: "Puedes realizar una nueva predicción",
+      });
+
+    } catch (error) {
+      console.error('Error al resetear predicción:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un error al resetear tu predicción",
+        variant: "destructive",
       });
     }
   };
@@ -196,6 +313,15 @@ export const RacePrediction = () => {
               <span className="text-f1-red">/F1</span>
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handleReset}
+                disabled={!canReset}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Resetear predicción
+              </Button>
               <img src="/lovable-uploads/5bf92527-3516-4110-9a4a-8b160a13117b.png" alt="PayPal" className="h-8" />
             </div>
           </div>
