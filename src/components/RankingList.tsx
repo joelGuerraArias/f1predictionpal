@@ -26,7 +26,7 @@ export const RankingList = () => {
         .from("race_predictions")
         .select(`
           *,
-          profiles (
+          profiles!race_predictions_user_id_fkey (
             email
           )
         `);

@@ -14,18 +14,18 @@ type PredictionWithUser = {
   had_dnf: boolean;
   profiles: {
     email: string | null;
-  } | null;
+  };
   races: {
     title: string;
     race_date: string;
-  } | null;
+  };
 }
 
 export const RecentPredictions = () => {
   const [showAll, setShowAll] = useState(false);
   
   const { data: predictions, isLoading } = useQuery<PredictionWithUser[]>({
-    queryKey: ["recent-predictions"],
+    queryKey: ["recent-predictions", showAll],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("race_predictions")
@@ -35,7 +35,7 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          profiles (
+          profiles!race_predictions_user_id_fkey (
             email
           )
         `)
