@@ -48,5 +48,13 @@ export const drivers: Driver[] = [
     team: "Mercedes",
     country: "GBR",
     imageUrl: "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/2col/image.png"
+  },
+  {
+    id: 22,
+    name: "Yuki Tsunoda",
+    number: "22",
+    team: "RB",
+    country: "JPN",
+    imageUrl: "https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/Y/YUKTSU01_Yuki_Tsunoda/yuktsu01.png"
   }
 ];
