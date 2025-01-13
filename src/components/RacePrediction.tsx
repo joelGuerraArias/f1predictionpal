@@ -113,7 +113,7 @@ export const RacePrediction = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Left column - Driver selection */}
               <div className="space-y-6">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-6">
                   {drivers.map((driver) => {
                     const isSelected = predictions.podium.includes(driver.id) || predictions.pole === driver.id;
                     return (
@@ -127,7 +127,7 @@ export const RacePrediction = () => {
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.25)' }}>
+                          <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.25)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
