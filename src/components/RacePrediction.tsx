@@ -107,15 +107,17 @@ export const RacePrediction = () => {
                       className="relative bg-white border border-gray-200 rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors"
                       onClick={() => handleDriverClick(driver.id)}
                     >
-                      <div className="aspect-square relative">
-                        <img
-                          src={driver.imageUrl}
-                          alt={driver.name}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                          <div className="text-xs font-bold text-white">{driver.number}</div>
-                          <div className="text-xs text-white truncate">{driver.name}</div>
+                      <div className="flex flex-col">
+                        <div className="aspect-square overflow-hidden rounded-lg">
+                          <img
+                            src={driver.imageUrl}
+                            alt={driver.name}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <div className="mt-2 text-center">
+                          <div className="text-xs font-bold">{driver.number}</div>
+                          <div className="text-xs truncate">{driver.name}</div>
                         </div>
                       </div>
                     </div>
@@ -140,13 +142,18 @@ export const RacePrediction = () => {
                       <div className="text-f1-red font-bold mb-2">
                         {position === 1 ? "PRIMERO" : position === 2 ? "SEGUNDO" : "TERCERO"}
                       </div>
-                      <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                      <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                         {predictions.podium[position - 1] ? (
-                          <img
-                            src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
-                            alt="Selected driver"
-                            className="h-full w-full object-cover rounded-lg"
-                          />
+                          <div className="flex flex-col items-center w-full">
+                            <img
+                              src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
+                              alt="Selected driver"
+                              className="h-20 w-full object-contain"
+                            />
+                            <div className="text-xs font-medium mt-1">
+                              {drivers.find(d => d.id === predictions.podium[position - 1])?.name}
+                            </div>
+                          </div>
                         ) : (
                           <span className="text-gray-400">
                             {selectedPosition === position 
