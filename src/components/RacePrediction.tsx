@@ -3,8 +3,17 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Flag, Share2, Facebook, Twitter, Send } from "lucide-react";
 import { drivers } from "@/data/drivers";
+import {
+  DndContext,
+  DragEndEvent,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core";
+import { useToast } from "./ui/use-toast";
 
 export const RacePrediction = () => {
+  const { toast } = useToast();
   const [predictions, setPredictions] = useState({
     podium: [] as number[],
     pole: null as number | null,
@@ -12,6 +21,64 @@ export const RacePrediction = () => {
     dnf: false,
     safetyCar: false,
   });
+  const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (!over) return;
+
+    const driverId = Number(active.id);
+    const position = Number(over.id);
+
+    if (position >= 1 && position <= 3) {
+      const newPodium = [...predictions.podium];
+      // Remove driver from previous position if exists
+      const oldIndex = newPodium.indexOf(driverId);
+      if (oldIndex !== -1) {
+        newPodium.splice(oldIndex, 1);
+      }
+      // Add driver to new position
+      newPodium[position - 1] = driverId;
+      
+      setPredictions({
+        ...predictions,
+        podium: newPodium,
+      });
+
+      toast({
+        title: "¡Piloto posicionado!",
+        description: `${drivers.find(d => d.id === driverId)?.name} en posición ${position}`,
+      });
+    }
+  };
+
+  const handleDriverClick = (driverId: number) => {
+    if (selectedPosition !== null) {
+      const newPodium = [...predictions.podium];
+      newPodium[selectedPosition - 1] = driverId;
+      
+      setPredictions({
+        ...predictions,
+        podium: newPodium,
+      });
+      
+      setSelectedPosition(null);
+      
+      toast({
+        title: "¡Piloto seleccionado!",
+        description: `${drivers.find(d => d.id === driverId)?.name} en posición ${selectedPosition}`,
+      });
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -27,62 +94,70 @@ export const RacePrediction = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left column - Driver selection */}
-            <div className="space-y-6">
-              <div className="grid grid-cols-4 gap-4">
-                {drivers.map((driver) => (
-                  <div
-                    key={driver.id}
-                    className="relative bg-white border border-gray-200 rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors"
-                    onClick={() => {
-                      // Handle driver selection logic
-                      console.log("Selected driver:", driver.name);
-                    }}
-                  >
-                    <div className="aspect-square relative">
-                      <img
-                        src={driver.imageUrl}
-                        alt={driver.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                        <div className="text-xs font-bold text-white">{driver.number}</div>
-                        <div className="text-xs text-white truncate">{driver.name}</div>
+          <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left column - Driver selection */}
+              <div className="space-y-6">
+                <div className="grid grid-cols-4 gap-4">
+                  {drivers.map((driver) => (
+                    <div
+                      key={driver.id}
+                      draggable
+                      id={String(driver.id)}
+                      className="relative bg-white border border-gray-200 rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors"
+                      onClick={() => handleDriverClick(driver.id)}
+                    >
+                      <div className="aspect-square relative">
+                        <img
+                          src={driver.imageUrl}
+                          alt={driver.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                          <div className="text-xs font-bold text-white">{driver.number}</div>
+                          <div className="text-xs text-white truncate">{driver.name}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Right column - Podium and additional predictions */}
-            <div className="space-y-6">
-              <div className="grid grid-cols-3 gap-4">
-                {[2, 1, 3].map((position) => (
-                  <div
-                    key={position}
-                    className={`bg-gray-100 p-4 rounded-lg text-center ${
-                      position === 1 ? "order-2" : position === 2 ? "order-1" : "order-3"
-                    }`}
-                  >
-                    <div className="text-f1-red font-bold mb-2">
-                      {position === 1 ? "PRIMERO" : position === 2 ? "SEGUNDO" : "TERCERO"}
+              {/* Right column - Podium and additional predictions */}
+              <div className="space-y-6">
+                <div className="grid grid-cols-3 gap-4">
+                  {[2, 1, 3].map((position) => (
+                    <div
+                      key={position}
+                      id={String(position)}
+                      className={`bg-gray-100 p-4 rounded-lg text-center ${
+                        selectedPosition === position ? "ring-2 ring-f1-red" : ""
+                      } ${
+                        position === 1 ? "order-2" : position === 2 ? "order-1" : "order-3"
+                      }`}
+                      onClick={() => setSelectedPosition(position)}
+                    >
+                      <div className="text-f1-red font-bold mb-2">
+                        {position === 1 ? "PRIMERO" : position === 2 ? "SEGUNDO" : "TERCERO"}
+                      </div>
+                      <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                        {predictions.podium[position - 1] ? (
+                          <img
+                            src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
+                            alt="Selected driver"
+                            className="h-full w-full object-cover rounded-lg"
+                          />
+                        ) : (
+                          <span className="text-gray-400">
+                            {selectedPosition === position 
+                              ? "Selecciona un piloto" 
+                              : "Arrastra o selecciona"}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
-                      {predictions.podium[position - 1] ? (
-                        <img
-                          src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
-                          alt="Selected driver"
-                          className="h-full w-full object-cover rounded-lg"
-                        />
-                      ) : (
-                        <span className="text-gray-400">Seleccionar piloto</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
@@ -199,8 +274,10 @@ export const RacePrediction = () => {
                   <Send className="h-5 w-5" />
                 </Button>
               </div>
+
+              </div>
             </div>
-          </div>
+          </DndContext>
         </div>
       </Card>
     </div>
