@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import { RaceManagement } from "@/components/RaceManagement";
 
 const queryClient = new QueryClient();
 
