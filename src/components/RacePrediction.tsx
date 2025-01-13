@@ -125,6 +125,18 @@ export const RacePrediction = () => {
     });
   };
 
+  const resetPodium = () => {
+    setPredictions({
+      ...predictions,
+      podium: [],
+      pole: null,
+    });
+    toast({
+      title: "Podio reseteado",
+      description: "Se han liberado todas las posiciones",
+    });
+  };
+
   const isDriverSelected = (driverId: number) => {
     return predictions.podium.includes(driverId) || predictions.pole === driverId;
   };
@@ -222,6 +234,14 @@ export const RacePrediction = () => {
                     </div>
                   ))}
                 </div>
+
+                <Button 
+                  onClick={resetPodium}
+                  variant="outline" 
+                  className="w-full border-f1-red text-f1-red hover:bg-red-50"
+                >
+                  Resetear podio
+                </Button>
 
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <h4 className="flex items-center text-f1-red font-bold mb-2">
