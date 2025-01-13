@@ -190,6 +190,56 @@ export type Database = {
         }
         Relationships: []
       }
+      race_predictions: {
+        Row: {
+          created_at: string
+          first_place_driver: string
+          had_dnf: boolean
+          had_rain: boolean
+          had_safety_car: boolean
+          id: string
+          pole_position_driver: string
+          race_id: string
+          second_place_driver: string
+          third_place_driver: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          first_place_driver: string
+          had_dnf: boolean
+          had_rain: boolean
+          had_safety_car: boolean
+          id?: string
+          pole_position_driver: string
+          race_id: string
+          second_place_driver: string
+          third_place_driver: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          first_place_driver?: string
+          had_dnf?: boolean
+          had_rain?: boolean
+          had_safety_car?: boolean
+          id?: string
+          pole_position_driver?: string
+          race_id?: string
+          second_place_driver?: string
+          third_place_driver?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "race_predictions_race_id_fkey"
+            columns: ["race_id"]
+            isOneToOne: false
+            referencedRelation: "races"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       races: {
         Row: {
           created_at: string

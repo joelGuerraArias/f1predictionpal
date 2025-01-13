@@ -11,6 +11,7 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 import { useToast } from "./ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const RacePrediction = () => {
   const { toast } = useToast();
@@ -23,6 +24,7 @@ export const RacePrediction = () => {
   });
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [selectingPole, setSelectingPole] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -92,6 +94,95 @@ export const RacePrediction = () => {
         title: "¡Piloto seleccionado!",
         description: `${drivers.find(d => d.id === driverId)?.name} en posición ${selectedPosition}`,
       });
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+
+      // Validar que todos los campos necesarios estén completos
+      if (!predictions.pole || predictions.podium.length !== 3) {
+        toast({
+          title: "Error",
+          description: "Por favor completa todas las predicciones antes de enviar",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "Debes iniciar sesión para enviar predicciones",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Obtener la carrera activa
+      const { data: races, error: raceError } = await supabase
+        .from('races')
+        .select('id')
+        .eq('status', 'scheduled')
+        .order('race_date', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (raceError || !races) {
+        toast({
+          title: "Error",
+          description: "No hay carreras programadas en este momento",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Guardar la predicción
+      const { error } = await supabase.from('race_predictions').insert({
+        user_id: user.id,
+        race_id: races.id,
+        pole_position_driver: drivers.find(d => d.id === predictions.pole)?.name || '',
+        first_place_driver: drivers.find(d => d.id === predictions.podium[0])?.name || '',
+        second_place_driver: drivers.find(d => d.id === predictions.podium[1])?.name || '',
+        third_place_driver: drivers.find(d => d.id === predictions.podium[2])?.name || '',
+        had_rain: predictions.rain,
+        had_dnf: predictions.dnf,
+        had_safety_car: predictions.safetyCar,
+      });
+
+      if (error) {
+        if (error.code === '23505') {
+          toast({
+            title: "Error",
+            description: "Ya has enviado una predicción para esta carrera",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Hubo un error al guardar tu predicción",
+            variant: "destructive",
+          });
+        }
+        return;
+      }
+
+      toast({
+        title: "¡Predicción enviada!",
+        description: "Tu predicción ha sido guardada exitosamente",
+      });
+
+    } catch (error) {
+      console.error('Error al enviar predicción:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un error al procesar tu predicción",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -295,26 +386,30 @@ export const RacePrediction = () => {
                       </label>
                     </div>
                   </div>
+
+                  <Button 
+                    className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "ENVIANDO..." : "ENVIAR"}
+                  </Button>
+                </div>
+
+                <div className="flex justify-center gap-4">
+                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+                    <Facebook className="h-5 w-5" />
+                  </Button>
+                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+                    <Twitter className="h-5 w-5" />
+                  </Button>
+                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+                    <Send className="h-5 w-5" />
+                  </Button>
                 </div>
               </div>
             </div>
           </DndContext>
-
-          <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
-            ENVIAR
-          </Button>
-
-          <div className="flex justify-center gap-4">
-            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-              <Facebook className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-              <Twitter className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-              <Send className="h-5 w-5" />
-            </Button>
-          </div>
         </div>
       </Card>
     </div>
