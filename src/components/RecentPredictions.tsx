@@ -2,13 +2,29 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
 import { useState } from "react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+
+type PredictionWithUser = {
+  id: string;
+  first_place_driver: string;
+  second_place_driver: string;
+  third_place_driver: string;
+  pole_position_driver: string;
+  had_rain: boolean;
+  had_safety_car: boolean;
+  had_dnf: boolean;
+  user: {
+    email: string;
+  } | null;
+  races: {
+    title: string;
+    race_date: string;
+  } | null;
+}
 
 export const RecentPredictions = () => {
   const [showAll, setShowAll] = useState(false);
   
-  const { data: predictions, isLoading } = useQuery({
+  const { data: predictions, isLoading } = useQuery<PredictionWithUser[]>({
     queryKey: ["recent-predictions"],
     queryFn: async () => {
       const { data: predictions, error } = await supabase
@@ -19,7 +35,7 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          user:user_id (
+          user:profiles!race_predictions_user_id_fkey (
             email
           )
         `)

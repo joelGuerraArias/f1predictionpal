@@ -10,7 +10,7 @@ interface UserPoints {
 }
 
 export const RankingList = () => {
-  const { data: rankings, isLoading } = useQuery({
+  const { data: rankings, isLoading } = useQuery<UserPoints[]>({
     queryKey: ["rankings"],
     queryFn: async () => {
       // Obtener todas las carreras finalizadas
@@ -21,12 +21,12 @@ export const RankingList = () => {
 
       if (racesError) throw racesError;
 
-      // Obtener todas las predicciones
+      // Obtener todas las predicciones con información de usuario
       const { data: predictions, error: predictionsError } = await supabase
         .from("race_predictions")
         .select(`
           *,
-          user:user_id (
+          user:profiles!race_predictions_user_id_fkey (
             email
           )
         `);
