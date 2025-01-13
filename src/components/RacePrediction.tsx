@@ -45,7 +45,7 @@ export const RacePrediction = () => {
       // Remove driver from previous position if exists
       const oldIndex = newPodium.indexOf(driverId);
       if (oldIndex !== -1) {
-        newPodium.splice(oldIndex, 1);
+        newPodium[oldIndex] = 0;
       }
       // Add driver to new position
       newPodium[position - 1] = driverId;
@@ -79,6 +79,11 @@ export const RacePrediction = () => {
 
     if (selectedPosition !== null) {
       const newPodium = [...predictions.podium];
+      // Remove driver from previous position if exists
+      const oldIndex = newPodium.indexOf(driverId);
+      if (oldIndex !== -1) {
+        newPodium[oldIndex] = 0;
+      }
       newPodium[selectedPosition - 1] = driverId;
       
       setPredictions({
