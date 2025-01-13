@@ -193,7 +193,6 @@ export const RacePrediction = () => {
                   ))}
                 </div>
 
-              <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <h4 className="flex items-center text-f1-red font-bold mb-2">
                     <Flag className="mr-2 h-4 w-4" />
@@ -222,6 +221,7 @@ export const RacePrediction = () => {
                   </div>
                 </div>
 
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="font-bold">LLUVIA</span>
                     <div className="flex gap-4">
@@ -300,28 +300,25 @@ export const RacePrediction = () => {
                     </div>
                   </div>
                 </div>
-
-              </div>
-
-              <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
-                ENVIAR
-              </Button>
-
-              <div className="flex justify-center gap-4 mt-4">
-                <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                  <Facebook className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                  <Twitter className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                  <Send className="h-5 w-5" />
-                </Button>
-              </div>
-
               </div>
             </div>
           </DndContext>
+
+          <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
+            ENVIAR
+          </Button>
+
+          <div className="flex justify-center gap-4">
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Facebook className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Twitter className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
