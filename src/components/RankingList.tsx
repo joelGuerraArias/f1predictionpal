@@ -24,7 +24,7 @@ export const RankingList = () => {
         .from("race_predictions")
         .select(`
           *,
-          profiles!race_predictions_user_id_fkey (
+          profiles!inner (
             email
           )
         `);
@@ -41,7 +41,7 @@ export const RankingList = () => {
           acc[userId] = {
             userId,
             points: 0,
-            profiles: prediction.profiles || { email: null },
+            profiles: prediction.profiles,
           };
         }
 
