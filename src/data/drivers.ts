@@ -18,12 +18,12 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/VERSTAPPEN.jpg"
   },
   {
-    id: 11,
-    name: "Sergio Pérez",
-    number: "11",
+    id: 81,
+    name: "Liam Lawson",
+    number: "81",
     team: "Red Bull Racing",
-    country: "MEX",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/PEREZ.jpg"
+    country: "NZL",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/LAWSON.jpg"
   },
   {
     id: 16,
@@ -35,7 +35,7 @@ export const drivers: Driver[] = [
   },
   {
     id: 55,
-    name: "Carlos Sainz",
+    name: "Carlos Sainz Jr.",
     number: "55",
     team: "Ferrari",
     country: "ESP",
@@ -56,6 +56,14 @@ export const drivers: Driver[] = [
     team: "Mercedes",
     country: "GBR",
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/RUSSELL.jpg"
+  },
+  {
+    id: 23,
+    name: "Andrea Kimi Antonelli",
+    number: "23",
+    team: "Mercedes",
+    country: "ITA",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/ANTONELLI.jpg"
   },
   {
     id: 4,
@@ -106,6 +114,14 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/OCON.jpg"
   },
   {
+    id: 15,
+    name: "Jack Doohan",
+    number: "15",
+    team: "Alpine",
+    country: "AUS",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/DOOHAN.jpg"
+  },
+  {
     id: 23,
     name: "Alexander Albon",
     number: "23",
@@ -114,12 +130,12 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/ALBON.jpg"
   },
   {
-    id: 2,
-    name: "Logan Sargeant",
-    number: "2",
+    id: 45,
+    name: "Oliver Bearman",
+    number: "45",
     team: "Williams",
-    country: "USA",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/SARGEANT.jpg"
+    country: "GBR",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/BERMAN.jpg"
   },
   {
     id: 27,
@@ -130,12 +146,12 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HULKBEMBERG.jpg"
   },
   {
-    id: 20,
-    name: "Kevin Magnussen",
-    number: "20",
+    id: 50,
+    name: "Gabriel Bortoleto",
+    number: "50",
     team: "Haas",
-    country: "DNK",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/MAGNUSSEN.jpg"
+    country: "BRA",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/BORTOLETO.jpg"
   },
   {
     id: 22,
@@ -146,27 +162,11 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/TSUNODA.jpg"
   },
   {
-    id: 3,
-    name: "Daniel Ricciardo",
-    number: "3",
+    id: 17,
+    name: "Isack Hadjar",
+    number: "17",
     team: "RB",
-    country: "AUS",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/RICCIARDO.jpg"
-  },
-  {
-    id: 77,
-    name: "Valtteri Bottas",
-    number: "77",
-    team: "Kick Sauber",
-    country: "FIN",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/BOTTAS.jpg"
-  },
-  {
-    id: 24,
-    name: "Zhou Guanyu",
-    number: "24",
-    team: "Kick Sauber",
-    country: "CHN",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/ZHOU.jpg"
+    country: "FRA",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HADJAR.jpg"
   }
 ];
