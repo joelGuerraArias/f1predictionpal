@@ -36,7 +36,7 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          profiles (
+          profiles!race_predictions_user_id_fkey (
             email
           )
         `)

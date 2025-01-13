@@ -13,7 +13,6 @@ export const RankingList = () => {
   const { data: rankings, isLoading } = useQuery<UserPoints[]>({
     queryKey: ["rankings"],
     queryFn: async () => {
-      // Obtener todas las carreras finalizadas
       const { data: races, error: racesError } = await supabase
         .from("races")
         .select("*")
@@ -21,12 +20,11 @@ export const RankingList = () => {
 
       if (racesError) throw racesError;
 
-      // Obtener todas las predicciones con información de usuario
       const { data: predictions, error: predictionsError } = await supabase
         .from("race_predictions")
         .select(`
           *,
-          profiles (
+          profiles!race_predictions_user_id_fkey (
             email
           )
         `);
@@ -34,7 +32,6 @@ export const RankingList = () => {
       if (predictionsError) throw predictionsError;
       if (!predictions) return [];
 
-      // Calcular puntos por usuario
       const userPoints = predictions.reduce((acc: Record<string, UserPoints>, prediction) => {
         const race = races?.find(r => r.id === prediction.race_id);
         if (!race) return acc;
@@ -48,7 +45,6 @@ export const RankingList = () => {
           };
         }
 
-        // Sumar puntos por predicciones correctas
         if (prediction.pole_position_driver === race.pole_position_driver) acc[userId].points += 1;
         if (prediction.first_place_driver === race.first_place_driver) acc[userId].points += 3;
         if (prediction.second_place_driver === race.second_place_driver) acc[userId].points += 2;
@@ -59,7 +55,6 @@ export const RankingList = () => {
         return acc;
       }, {});
 
-      // Convertir a array y ordenar por puntos
       return Object.values(userPoints).sort((a, b) => b.points - a.points);
     },
   });
