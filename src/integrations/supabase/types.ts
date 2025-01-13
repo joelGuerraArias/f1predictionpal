@@ -190,6 +190,30 @@ export type Database = {
         }
         Relationships: []
       }
+      races: {
+        Row: {
+          created_at: string
+          id: string
+          race_date: string
+          race_time: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          race_date: string
+          race_time: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          race_date?: string
+          race_time?: string
+          title?: string
+        }
+        Relationships: []
+      }
       seasons: {
         Row: {
           created_at: string
