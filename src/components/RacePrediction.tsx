@@ -102,6 +102,7 @@ export const RacePrediction = () => {
 
   const removeFromPodium = (position: number) => {
     const newPodium = [...predictions.podium];
+    const driverId = newPodium[position - 1];
     newPodium[position - 1] = 0;
     setPredictions({
       ...predictions,
@@ -109,7 +110,7 @@ export const RacePrediction = () => {
     });
     toast({
       title: "Piloto removido",
-      description: "Posición del podio liberada",
+      description: `${drivers.find(d => d.id === driverId)?.name} removido del podio`,
     });
   };
 
