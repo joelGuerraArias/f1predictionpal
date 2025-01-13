@@ -114,29 +114,41 @@ export const RacePrediction = () => {
               {/* Left column - Driver selection */}
               <div className="space-y-6">
                 <div className="grid grid-cols-4 gap-4">
-                  {drivers.map((driver) => (
-                    <div
-                      key={driver.id}
-                      draggable
-                      id={String(driver.id)}
-                      className="relative bg-white border border-gray-200 rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors"
-                      onClick={() => handleDriverClick(driver.id)}
-                    >
-                      <div className="flex flex-col">
-                        <div className="aspect-square overflow-hidden rounded-lg">
-                          <img
-                            src={driver.imageUrl}
-                            alt={driver.name}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                        <div className="mt-2 text-center">
-                          <div className="text-xs font-bold">{driver.number}</div>
-                          <div className="text-xs truncate">{driver.name}</div>
+                  {drivers.map((driver) => {
+                    const isSelected = predictions.podium.includes(driver.id) || predictions.pole === driver.id;
+                    return (
+                      <div
+                        key={driver.id}
+                        draggable
+                        id={String(driver.id)}
+                        className={`relative bg-white border ${
+                          isSelected ? 'border-f1-red bg-red-50' : 'border-gray-200'
+                        } rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors`}
+                        onClick={() => handleDriverClick(driver.id)}
+                      >
+                        <div className="flex flex-col">
+                          <div className="aspect-square overflow-hidden rounded-lg">
+                            <img
+                              src={driver.imageUrl}
+                              alt={driver.name}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          <div className="mt-2 text-center">
+                            <div className="text-xs font-bold">{driver.number}</div>
+                            <div className="text-xs truncate">{driver.name}</div>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute -top-2 -right-2 bg-f1-red text-white text-xs px-2 py-1 rounded-full">
+                              {predictions.pole === driver.id 
+                                ? 'POLE' 
+                                : `P${predictions.podium.indexOf(driver.id) + 1}`}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
