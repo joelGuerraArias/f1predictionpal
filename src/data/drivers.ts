@@ -18,6 +18,14 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/VERSTAPPEN.jpg"
   },
   {
+    id: 11,
+    name: "Sergio Pérez",
+    number: "11",
+    team: "Red Bull Racing",
+    country: "MEX",
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/PEREZ.jpg"
+  },
+  {
     id: 16,
     name: "Charles Leclerc",
     number: "16",
