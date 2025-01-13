@@ -97,7 +97,7 @@ export const RacePrediction = () => {
 
   const removeFromPodium = (position: number) => {
     const newPodium = [...predictions.podium];
-    newPodium[position - 1] = 0; // Using 0 as empty position
+    newPodium[position - 1] = 0;
     setPredictions({
       ...predictions,
       podium: newPodium,
