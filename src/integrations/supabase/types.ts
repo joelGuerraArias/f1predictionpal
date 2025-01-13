@@ -193,23 +193,44 @@ export type Database = {
       races: {
         Row: {
           created_at: string
+          first_place_driver: string | null
+          had_rain: boolean | null
+          had_safety_car: boolean | null
           id: string
+          pole_position_driver: string | null
           race_date: string
           race_time: string
+          second_place_driver: string | null
+          status: string | null
+          third_place_driver: string | null
           title: string
         }
         Insert: {
           created_at?: string
+          first_place_driver?: string | null
+          had_rain?: boolean | null
+          had_safety_car?: boolean | null
           id?: string
+          pole_position_driver?: string | null
           race_date: string
           race_time: string
+          second_place_driver?: string | null
+          status?: string | null
+          third_place_driver?: string | null
           title: string
         }
         Update: {
           created_at?: string
+          first_place_driver?: string | null
+          had_rain?: boolean | null
+          had_safety_car?: boolean | null
           id?: string
+          pole_position_driver?: string | null
           race_date?: string
           race_time?: string
+          second_place_driver?: string | null
+          status?: string | null
+          third_place_driver?: string | null
           title?: string
         }
         Relationships: []
