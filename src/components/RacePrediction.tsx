@@ -113,7 +113,7 @@ export const RacePrediction = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Left column - Driver selection */}
               <div className="space-y-6">
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   {drivers.map((driver) => {
                     const isSelected = predictions.podium.includes(driver.id) || predictions.pole === driver.id;
                     return (
@@ -127,16 +127,12 @@ export const RacePrediction = () => {
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.25)' }}>
+                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.5)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
                               className="w-full h-full object-contain"
                             />
-                          </div>
-                          <div className="mt-2 text-center">
-                            <div className="text-xs font-bold">{driver.number}</div>
-                            <div className="text-xs truncate">{driver.name}</div>
                           </div>
                           {isSelected && (
                             <div className="absolute -top-2 -right-2 bg-f1-red text-white text-xs px-2 py-1 rounded-full">
