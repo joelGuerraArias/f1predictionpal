@@ -313,15 +313,6 @@ export const RacePrediction = () => {
               <span className="text-f1-red">/F1</span>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                disabled={!canReset}
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Resetear predicción
-              </Button>
               <img src="/lovable-uploads/5bf92527-3516-4110-9a4a-8b160a13117b.png" alt="PayPal" className="h-8" />
             </div>
           </div>
@@ -405,6 +396,16 @@ export const RacePrediction = () => {
                     </div>
                   ))}
                 </div>
+
+                <Button
+                  variant="outline"
+                  onClick={handleReset}
+                  disabled={!canReset}
+                  className="flex items-center gap-2 w-full"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Resetear predicción
+                </Button>
 
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <h4 className="flex items-center text-f1-red font-bold mb-2">
