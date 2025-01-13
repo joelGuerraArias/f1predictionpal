@@ -127,7 +127,7 @@ export const RacePrediction = () => {
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg">
+                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.25)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
@@ -175,7 +175,7 @@ export const RacePrediction = () => {
                             <img
                               src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
                               alt="Selected driver"
-                              className="h-20 w-full object-contain"
+                              className="h-20 w-full object-contain transform scale-125"
                             />
                             <div className="text-xs font-medium mt-1">
                               {drivers.find(d => d.id === predictions.podium[position - 1])?.name}
@@ -208,7 +208,7 @@ export const RacePrediction = () => {
                         <img
                           src={drivers.find(d => d.id === predictions.pole)?.imageUrl}
                           alt="Pole position driver"
-                          className="h-12 w-12 object-contain"
+                          className="h-12 w-12 object-contain transform scale-125"
                         />
                         <span className="text-sm font-medium">
                           {drivers.find(d => d.id === predictions.pole)?.name}
@@ -222,7 +222,6 @@ export const RacePrediction = () => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="font-bold">LLUVIA</span>
                     <div className="flex gap-4">
@@ -301,6 +300,7 @@ export const RacePrediction = () => {
                     </div>
                   </div>
                 </div>
+
               </div>
 
               <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
