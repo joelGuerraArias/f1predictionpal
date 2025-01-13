@@ -19,9 +19,11 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          profiles (
-            name,
-            email
+          user:user_id (
+            profiles (
+              name,
+              email
+            )
           )
         `)
         .order("created_at", { ascending: false })
@@ -46,7 +48,7 @@ export const RecentPredictions = () => {
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="font-semibold">
-                  {prediction.profiles?.name || prediction.profiles?.email}
+                  {prediction.user?.profiles?.[0]?.name || prediction.user?.profiles?.[0]?.email}
                 </h3>
                 <p className="text-sm text-gray-600">
                   {prediction.races?.title} - {format(new Date(prediction.races?.race_date), "d 'de' MMMM, yyyy", { locale: es })}

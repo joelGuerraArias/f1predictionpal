@@ -1,6 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+interface UserPoints {
+  userId: string;
+  points: number;
+  user: {
+    name: string | null;
+    email: string | null;
+  };
+}
+
 export const RankingList = () => {
   const { data: rankings, isLoading } = useQuery({
     queryKey: ["rankings"],
@@ -16,24 +25,30 @@ export const RankingList = () => {
         .from("race_predictions")
         .select(`
           *,
-          profiles (
-            name,
-            email
+          user:user_id (
+            profiles (
+              name,
+              email
+            )
           )
         `);
 
       if (predictionsError) throw predictionsError;
 
       // Calcular puntos por usuario
-      const userPoints = predictions.reduce((acc, prediction) => {
+      const userPoints = predictions.reduce((acc: Record<string, UserPoints>, prediction) => {
         const race = races.find(r => r.id === prediction.race_id);
         if (!race) return acc;
 
         const userId = prediction.user_id;
         if (!acc[userId]) {
           acc[userId] = {
+            userId,
             points: 0,
-            user: prediction.profiles,
+            user: {
+              name: prediction.user?.profiles?.[0]?.name,
+              email: prediction.user?.profiles?.[0]?.email,
+            },
           };
         }
 
@@ -49,13 +64,7 @@ export const RankingList = () => {
       }, {});
 
       // Convertir a array y ordenar por puntos
-      return Object.entries(userPoints)
-        .map(([userId, data]) => ({
-          userId,
-          points: data.points,
-          user: data.user,
-        }))
-        .sort((a, b) => b.points - a.points);
+      return Object.values(userPoints).sort((a, b) => b.points - a.points);
     },
   });
 
