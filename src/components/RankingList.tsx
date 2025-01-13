@@ -26,16 +26,17 @@ export const RankingList = () => {
         .from("race_predictions")
         .select(`
           *,
-          user:profiles!race_predictions_user_id_fkey (
+          profiles (
             email
           )
         `);
 
       if (predictionsError) throw predictionsError;
+      if (!predictions) return [];
 
       // Calcular puntos por usuario
       const userPoints = predictions.reduce((acc: Record<string, UserPoints>, prediction) => {
-        const race = races.find(r => r.id === prediction.race_id);
+        const race = races?.find(r => r.id === prediction.race_id);
         if (!race) return acc;
 
         const userId = prediction.user_id;
@@ -44,7 +45,7 @@ export const RankingList = () => {
             userId,
             points: 0,
             user: {
-              email: prediction.user?.email,
+              email: prediction.profiles?.email,
             },
           };
         }

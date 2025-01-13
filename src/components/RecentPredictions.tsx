@@ -12,8 +12,8 @@ type PredictionWithUser = {
   had_rain: boolean;
   had_safety_car: boolean;
   had_dnf: boolean;
-  user: {
-    email: string;
+  profiles: {
+    email: string | null;
   } | null;
   races: {
     title: string;
@@ -27,7 +27,7 @@ export const RecentPredictions = () => {
   const { data: predictions, isLoading } = useQuery<PredictionWithUser[]>({
     queryKey: ["recent-predictions"],
     queryFn: async () => {
-      const { data: predictions, error } = await supabase
+      const { data, error } = await supabase
         .from("race_predictions")
         .select(`
           *,
@@ -35,7 +35,7 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          user:profiles!race_predictions_user_id_fkey (
+          profiles (
             email
           )
         `)
@@ -43,7 +43,7 @@ export const RecentPredictions = () => {
         .limit(showAll ? 50 : 3);
 
       if (error) throw error;
-      return predictions;
+      return data || [];
     },
   });
 
@@ -60,7 +60,7 @@ export const RecentPredictions = () => {
           >
             <div className="grid grid-cols-6 gap-4 text-sm">
               <div className="font-medium">
-                {prediction.user?.email?.split('@')[0]}
+                {prediction.profiles?.email?.split('@')[0]}
               </div>
               <div>{prediction.first_place_driver}</div>
               <div>{prediction.second_place_driver}</div>
