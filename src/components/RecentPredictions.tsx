@@ -12,6 +12,7 @@ type PredictionWithUser = {
   had_rain: boolean;
   had_safety_car: boolean;
   had_dnf: boolean;
+  user_id: string;
   profiles: {
     email: string | null;
   };
@@ -35,7 +36,7 @@ export const RecentPredictions = () => {
             title,
             race_date
           ),
-          profiles!race_predictions_user_id_fkey (
+          profiles (
             email
           )
         `)
