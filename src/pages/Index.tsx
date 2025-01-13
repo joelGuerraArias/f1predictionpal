@@ -33,8 +33,8 @@ const Index = () => {
         
         {activeTab === "predictions" && (
           <div className="space-y-8">
-            <RacePrediction />
             <RecentPredictions />
+            <RacePrediction />
           </div>
         )}
         
