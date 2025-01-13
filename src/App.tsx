@@ -10,16 +10,19 @@ import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setIsAuthenticated(!!session);
+      setIsAdmin(session?.user?.email === 'autosemana@gmail.com');
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
         setIsAuthenticated(!!session);
+        setIsAdmin(session?.user?.email === 'autosemana@gmail.com');
       });
 
       return () => subscription.unsubscribe();
@@ -32,7 +35,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Cargando...</div>;
   }
 
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/" />;
+  }
+
+  return <>{children}</>;
 };
 
 const App = () => (
@@ -43,6 +54,14 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute adminOnly>
+                <RaceManagement />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/"
             element={

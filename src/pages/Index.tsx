@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { RacePrediction } from "@/components/RacePrediction";
-import { RaceManagement } from "@/components/RaceManagement";
 
 const Index = () => {
   return (
@@ -8,7 +7,6 @@ const Index = () => {
       <Header />
       <main className="w-full py-8 px-4">
         <div className="space-y-8">
-          <RaceManagement />
           <RacePrediction />
         </div>
       </main>
