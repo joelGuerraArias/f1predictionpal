@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-import { Flag, Share2, Facebook, Twitter, Send, X } from "lucide-react";
+import { Flag, Share2, Facebook, Twitter, Send } from "lucide-react";
 import { drivers } from "@/data/drivers";
 import {
   DndContext,
@@ -45,7 +45,7 @@ export const RacePrediction = () => {
       // Remove driver from previous position if exists
       const oldIndex = newPodium.indexOf(driverId);
       if (oldIndex !== -1) {
-        newPodium[oldIndex] = 0;
+        newPodium.splice(oldIndex, 1);
       }
       // Add driver to new position
       newPodium[position - 1] = driverId;
@@ -79,11 +79,6 @@ export const RacePrediction = () => {
 
     if (selectedPosition !== null) {
       const newPodium = [...predictions.podium];
-      // Remove driver from previous position if exists
-      const oldIndex = newPodium.indexOf(driverId);
-      if (oldIndex !== -1) {
-        newPodium[oldIndex] = 0;
-      }
       newPodium[selectedPosition - 1] = driverId;
       
       setPredictions({
@@ -98,47 +93,6 @@ export const RacePrediction = () => {
         description: `${drivers.find(d => d.id === driverId)?.name} en posición ${selectedPosition}`,
       });
     }
-  };
-
-  const removeFromPodium = (position: number) => {
-    const newPodium = [...predictions.podium];
-    const driverId = newPodium[position - 1];
-    newPodium[position - 1] = 0;
-    setPredictions({
-      ...predictions,
-      podium: newPodium,
-    });
-    toast({
-      title: "Piloto removido",
-      description: `${drivers.find(d => d.id === driverId)?.name} removido del podio`,
-    });
-  };
-
-  const removeFromPole = () => {
-    setPredictions({
-      ...predictions,
-      pole: null,
-    });
-    toast({
-      title: "Pole position removida",
-      description: "Selección de pole position liberada",
-    });
-  };
-
-  const resetPodium = () => {
-    setPredictions({
-      ...predictions,
-      podium: [],
-      pole: null,
-    });
-    toast({
-      title: "Podio reseteado",
-      description: "Se han liberado todas las posiciones",
-    });
-  };
-
-  const isDriverSelected = (driverId: number) => {
-    return predictions.podium.includes(driverId) || predictions.pole === driverId;
   };
 
   return (
@@ -161,17 +115,19 @@ export const RacePrediction = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-3 gap-4">
                   {drivers.map((driver) => {
-                    if (isDriverSelected(driver.id)) return null;
+                    const isSelected = predictions.podium.includes(driver.id) || predictions.pole === driver.id;
                     return (
                       <div
                         key={driver.id}
                         draggable
                         id={String(driver.id)}
-                        className="relative bg-white border border-gray-200 rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors"
+                        className={`relative bg-white border ${
+                          isSelected ? 'border-f1-red bg-red-50' : 'border-gray-200'
+                        } rounded-lg p-2 cursor-pointer hover:border-f1-red transition-colors`}
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.2)' }}>
+                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.35)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
@@ -181,6 +137,13 @@ export const RacePrediction = () => {
                           <div className="mt-2 text-center">
                             <div className="text-xs font-bold">{driver.number}</div>
                           </div>
+                          {isSelected && (
+                            <div className="absolute -top-2 -right-2 bg-f1-red text-white text-xs px-2 py-1 rounded-full">
+                              {predictions.pole === driver.id 
+                                ? 'POLE' 
+                                : `P${predictions.podium.indexOf(driver.id) + 1}`}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -205,22 +168,13 @@ export const RacePrediction = () => {
                       <div className="text-f1-red font-bold mb-2">
                         {position === 1 ? "PRIMERO" : position === 2 ? "SEGUNDO" : "TERCERO"}
                       </div>
-                      <div className="relative h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                      <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                         {predictions.podium[position - 1] ? (
                           <div className="flex flex-col items-center w-full">
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeFromPodium(position);
-                              }}
-                              className="absolute top-1 right-1 p-1 bg-red-100 rounded-full hover:bg-red-200"
-                            >
-                              <X className="h-4 w-4 text-f1-red" />
-                            </button>
                             <img
                               src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
                               alt="Selected driver"
-                              className="h-20 w-full object-contain transform scale-120"
+                              className="h-20 w-full object-contain transform scale-135"
                             />
                           </div>
                         ) : (
@@ -235,38 +189,21 @@ export const RacePrediction = () => {
                   ))}
                 </div>
 
-                <Button 
-                  onClick={resetPodium}
-                  variant="outline" 
-                  className="w-full border-f1-red text-f1-red hover:bg-red-50"
-                >
-                  Resetear podio
-                </Button>
-
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <h4 className="flex items-center text-f1-red font-bold mb-2">
                     <Flag className="mr-2 h-4 w-4" />
                     POLE POSITION
                   </h4>
                   <div 
-                    className={`relative h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center cursor-pointer hover:border-f1-red transition-colors ${selectingPole ? 'ring-2 ring-f1-red' : ''}`}
+                    className={`h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center cursor-pointer hover:border-f1-red transition-colors ${selectingPole ? 'ring-2 ring-f1-red' : ''}`}
                     onClick={() => setSelectingPole(!selectingPole)}
                   >
                     {predictions.pole ? (
                       <div className="flex items-center gap-2">
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeFromPole();
-                          }}
-                          className="absolute top-1 right-1 p-1 bg-red-100 rounded-full hover:bg-red-200"
-                        >
-                          <X className="h-4 w-4 text-f1-red" />
-                        </button>
                         <img
                           src={drivers.find(d => d.id === predictions.pole)?.imageUrl}
                           alt="Pole position driver"
-                          className="h-12 w-12 object-contain transform scale-120"
+                          className="h-12 w-12 object-contain transform scale-135"
                         />
                       </div>
                     ) : (
@@ -356,25 +293,25 @@ export const RacePrediction = () => {
                     </div>
                   </div>
                 </div>
-
-                <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
-                  ENVIAR
-                </Button>
-
-                <div className="flex justify-center gap-4">
-                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                    <Facebook className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                    <Twitter className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
-                    <Send className="h-5 w-5" />
-                  </Button>
-                </div>
               </div>
             </div>
           </DndContext>
+
+          <Button className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold">
+            ENVIAR
+          </Button>
+
+          <div className="flex justify-center gap-4">
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Facebook className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Twitter className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" className="rounded-full bg-gray-700 hover:bg-gray-600 text-white p-2">
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
