@@ -15,7 +15,7 @@ export const RacePrediction = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <Card className="bg-f1-dark text-white shadow-xl">
+      <Card className="bg-f1-gray text-white shadow-xl">
         <div className="p-6 space-y-8">
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-f1-red">GRAN PREMIO DE ARABIA</h2>
