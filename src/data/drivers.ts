@@ -18,7 +18,7 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/VERSTAPPEN.jpg"
   },
   {
-    id: 81,
+    id: 40,
     name: "Liam Lawson",
     number: "81",
     team: "Red Bull Racing",
@@ -122,7 +122,7 @@ export const drivers: Driver[] = [
     imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/DOOHAN.jpg"
   },
   {
-    id: 23,
+    id: 24,
     name: "Alexander Albon",
     number: "23",
     team: "Williams",
