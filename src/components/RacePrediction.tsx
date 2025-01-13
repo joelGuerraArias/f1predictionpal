@@ -127,7 +127,7 @@ export const RacePrediction = () => {
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.5)' }}>
+                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.35)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
@@ -174,11 +174,8 @@ export const RacePrediction = () => {
                             <img
                               src={drivers.find(d => d.id === predictions.podium[position - 1])?.imageUrl}
                               alt="Selected driver"
-                              className="h-20 w-full object-contain transform scale-150"
+                              className="h-20 w-full object-contain transform scale-135"
                             />
-                            <div className="text-xs font-medium mt-1">
-                              {drivers.find(d => d.id === predictions.podium[position - 1])?.name}
-                            </div>
                           </div>
                         ) : (
                           <span className="text-gray-400">
@@ -206,11 +203,8 @@ export const RacePrediction = () => {
                         <img
                           src={drivers.find(d => d.id === predictions.pole)?.imageUrl}
                           alt="Pole position driver"
-                          className="h-12 w-12 object-contain transform scale-150"
+                          className="h-12 w-12 object-contain transform scale-135"
                         />
-                        <span className="text-sm font-medium">
-                          {drivers.find(d => d.id === predictions.pole)?.name}
-                        </span>
                       </div>
                     ) : (
                       <span className="text-gray-400">
