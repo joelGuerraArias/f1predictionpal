@@ -135,7 +135,7 @@ export const drivers: Driver[] = [
     number: "45",
     team: "Williams",
     country: "GBR",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/BEARMAN.jpg"
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/BERMAN.jpg"
   },
   {
     id: 27,
@@ -143,7 +143,7 @@ export const drivers: Driver[] = [
     number: "27",
     team: "Haas",
     country: "GER",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HULKENBERG.jpg"
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HULKBEMBERG.jpg"
   },
   {
     id: 50,
