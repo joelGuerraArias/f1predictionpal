@@ -3,9 +3,9 @@ import { RacePrediction } from "@/components/RacePrediction";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full">
       <Header />
-      <main className="container mx-auto py-8">
+      <main className="w-full py-8">
         <RacePrediction />
       </main>
     </div>
