@@ -127,7 +127,7 @@ export const drivers: Driver[] = [
     number: "27",
     team: "Haas",
     country: "GER",
-    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HULKBEMBERG.jpg"
+    imageUrl: "https://fgjpullzone.b-cdn.net/f1/caras%20pilotos/HULKEMBERG.jpg"
   },
   {
     id: 20,
