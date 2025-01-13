@@ -127,7 +127,7 @@ export const RacePrediction = () => {
                         onClick={() => handleDriverClick(driver.id)}
                       >
                         <div className="flex flex-col">
-                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.5)' }}>
+                          <div className="aspect-square overflow-hidden rounded-lg" style={{ transform: 'scale(1.25)' }}>
                             <img
                               src={driver.imageUrl}
                               alt={driver.name}
