@@ -22,6 +22,7 @@ export const RacePrediction = () => {
     safetyCar: false,
   });
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+  const [selectingPole, setSelectingPole] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -62,6 +63,20 @@ export const RacePrediction = () => {
   };
 
   const handleDriverClick = (driverId: number) => {
+    if (selectingPole) {
+      setPredictions({
+        ...predictions,
+        pole: driverId,
+      });
+      setSelectingPole(false);
+      
+      toast({
+        title: "¡Pole position seleccionada!",
+        description: `${drivers.find(d => d.id === driverId)?.name} seleccionado para la pole`,
+      });
+      return;
+    }
+
     if (selectedPosition !== null) {
       const newPodium = [...predictions.podium];
       newPodium[selectedPosition - 1] = driverId;
@@ -172,15 +187,25 @@ export const RacePrediction = () => {
                     <Flag className="mr-2 h-4 w-4" />
                     POLE POSITION
                   </h4>
-                  <div className="h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                  <div 
+                    className={`h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center cursor-pointer hover:border-f1-red transition-colors ${selectingPole ? 'ring-2 ring-f1-red' : ''}`}
+                    onClick={() => setSelectingPole(!selectingPole)}
+                  >
                     {predictions.pole ? (
-                      <img
-                        src={drivers.find(d => d.id === predictions.pole)?.imageUrl}
-                        alt="Pole position driver"
-                        className="h-full w-full object-cover rounded-lg"
-                      />
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={drivers.find(d => d.id === predictions.pole)?.imageUrl}
+                          alt="Pole position driver"
+                          className="h-12 w-12 object-contain"
+                        />
+                        <span className="text-sm font-medium">
+                          {drivers.find(d => d.id === predictions.pole)?.name}
+                        </span>
+                      </div>
                     ) : (
-                      <span className="text-gray-400">Seleccionar piloto</span>
+                      <span className="text-gray-400">
+                        {selectingPole ? "Selecciona un piloto" : "Seleccionar piloto"}
+                      </span>
                     )}
                   </div>
                 </div>
