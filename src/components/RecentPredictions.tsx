@@ -32,11 +32,11 @@ export const RecentPredictions = () => {
         .from("race_predictions")
         .select(`
           *,
-          races!inner (
+          races (
             title,
             race_date
           ),
-          profiles!inner (
+          profiles (
             email
           )
         `)
@@ -44,7 +44,14 @@ export const RecentPredictions = () => {
         .limit(showAll ? 50 : 3);
 
       if (error) throw error;
-      return data as PredictionWithUser[];
+      if (!data) return [];
+
+      return data.map(prediction => ({
+        ...prediction,
+        profiles: {
+          email: prediction.profiles?.email || null
+        }
+      })) as PredictionWithUser[];
     },
   });
 
