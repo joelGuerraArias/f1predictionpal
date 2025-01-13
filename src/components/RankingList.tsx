@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface UserPoints {
   userId: string;
   points: number;
-  user: {
+  profiles: {
     email: string | null;
   };
 }
@@ -44,9 +44,7 @@ export const RankingList = () => {
           acc[userId] = {
             userId,
             points: 0,
-            user: {
-              email: prediction.profiles?.email,
-            },
+            profiles: prediction.profiles || { email: null },
           };
         }
 
@@ -82,7 +80,7 @@ export const RankingList = () => {
           <tbody>
             {rankings?.map((ranking) => (
               <tr key={ranking.userId} className="border-t border-gray-200">
-                <td className="px-4 py-2">{ranking.user.email?.split('@')[0]}</td>
+                <td className="px-4 py-2">{ranking.profiles.email?.split('@')[0]}</td>
                 <td className="px-4 py-2">{ranking.points}</td>
               </tr>
             ))}
