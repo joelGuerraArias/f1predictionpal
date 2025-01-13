@@ -26,15 +26,14 @@ export const PodiumPosition = ({
       onClick={onPositionClick}
     >
       <div className="text-f1-red font-bold mb-2">{positionText}</div>
-      <div className="h-24 bg-white border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+      <div className="h-28 bg-white border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
         {driver ? (
-          <div className="flex flex-col items-center w-full">
+          <div className="flex items-center justify-center w-full h-full">
             <img
               src={driver.imageUrl}
-              alt="Selected driver"
-              className="h-20 w-full object-contain transform scale-125"
+              alt={driver.name}
+              className="w-full h-full object-contain transform scale-110"
             />
-            <div className="text-xs font-medium mt-1">{driver.name}</div>
           </div>
         ) : (
           <span className="text-gray-400">
