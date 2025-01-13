@@ -20,10 +20,7 @@ export const RecentPredictions = () => {
             race_date
           ),
           user:user_id (
-            profiles (
-              name,
-              email
-            )
+            email
           )
         `)
         .order("created_at", { ascending: false })
@@ -45,34 +42,18 @@ export const RecentPredictions = () => {
             key={prediction.id}
             className="bg-white shadow rounded-lg p-4 border border-gray-200"
           >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold">
-                  {prediction.user?.profiles?.[0]?.name || prediction.user?.profiles?.[0]?.email}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {prediction.races?.title} - {format(new Date(prediction.races?.race_date), "d 'de' MMMM, yyyy", { locale: es })}
-                </p>
+            <div className="grid grid-cols-6 gap-4 text-sm">
+              <div className="font-medium">
+                {prediction.user?.email?.split('@')[0]}
               </div>
-            </div>
-            <div className="mt-2 grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium">Pole Position:</p>
-                <p className="text-sm">{prediction.pole_position_driver}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium">Podio:</p>
-                <p className="text-sm">1. {prediction.first_place_driver}</p>
-                <p className="text-sm">2. {prediction.second_place_driver}</p>
-                <p className="text-sm">3. {prediction.third_place_driver}</p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-sm font-medium">Condiciones:</p>
-                <div className="flex gap-2 text-sm">
-                  {prediction.had_rain && <span>Lluvia</span>}
-                  {prediction.had_safety_car && <span>Safety Car</span>}
-                  {prediction.had_dnf && <span>DNF</span>}
-                </div>
+              <div>{prediction.first_place_driver}</div>
+              <div>{prediction.second_place_driver}</div>
+              <div>{prediction.third_place_driver}</div>
+              <div>{prediction.pole_position_driver}</div>
+              <div className="flex gap-2">
+                {prediction.had_rain && <span>Lluvia</span>}
+                {prediction.had_safety_car && <span>SC</span>}
+                {prediction.had_dnf && <span>DNF</span>}
               </div>
             </div>
           </div>

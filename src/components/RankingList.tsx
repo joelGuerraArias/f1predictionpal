@@ -5,7 +5,6 @@ interface UserPoints {
   userId: string;
   points: number;
   user: {
-    name: string | null;
     email: string | null;
   };
 }
@@ -14,22 +13,21 @@ export const RankingList = () => {
   const { data: rankings, isLoading } = useQuery({
     queryKey: ["rankings"],
     queryFn: async () => {
+      // Obtener todas las carreras finalizadas
       const { data: races, error: racesError } = await supabase
         .from("races")
         .select("*")
-        .eq("status", "completed");
+        .eq("status", "finished");
 
       if (racesError) throw racesError;
 
+      // Obtener todas las predicciones
       const { data: predictions, error: predictionsError } = await supabase
         .from("race_predictions")
         .select(`
           *,
           user:user_id (
-            profiles (
-              name,
-              email
-            )
+            email
           )
         `);
 
@@ -46,14 +44,13 @@ export const RankingList = () => {
             userId,
             points: 0,
             user: {
-              name: prediction.user?.profiles?.[0]?.name,
-              email: prediction.user?.profiles?.[0]?.email,
+              email: prediction.user?.email,
             },
           };
         }
 
-        // Puntos por predicciones correctas
-        if (prediction.pole_position_driver === race.pole_position_driver) acc[userId].points += 2;
+        // Sumar puntos por predicciones correctas
+        if (prediction.pole_position_driver === race.pole_position_driver) acc[userId].points += 1;
         if (prediction.first_place_driver === race.first_place_driver) acc[userId].points += 3;
         if (prediction.second_place_driver === race.second_place_driver) acc[userId].points += 2;
         if (prediction.third_place_driver === race.third_place_driver) acc[userId].points += 1;
@@ -72,36 +69,20 @@ export const RankingList = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-4">Ranking</h2>
+      <h2 className="text-2xl font-bold mb-4">Ranking de Usuarios</h2>
       <div className="bg-white shadow rounded-lg overflow-hidden">
-        <table className="min-w-full">
+        <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Posición
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Usuario
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Puntos
-              </th>
+              <th className="px-4 py-2 text-left">Usuario</th>
+              <th className="px-4 py-2 text-left">Puntos</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {rankings?.map((ranking, index) => (
-              <tr key={ranking.userId}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {index + 1}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {ranking.user?.name || ranking.user?.email}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {ranking.points}
-                </td>
+          <tbody>
+            {rankings?.map((ranking) => (
+              <tr key={ranking.userId} className="border-t border-gray-200">
+                <td className="px-4 py-2">{ranking.user.email?.split('@')[0]}</td>
+                <td className="px-4 py-2">{ranking.points}</td>
               </tr>
             ))}
           </tbody>
