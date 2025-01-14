@@ -429,38 +429,6 @@ export type Database = {
           },
         ]
       }
-      victory_votes: {
-        Row: {
-          created_at: string | null
-          driver_id: number
-          id: string
-          race_id: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          driver_id: number
-          id?: string
-          race_id?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          driver_id?: number
-          id?: string
-          race_id?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "victory_votes_race_id_fkey"
-            columns: ["race_id"]
-            isOneToOne: false
-            referencedRelation: "races"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       youtube_videos: {
         Row: {
           category_id: string | null

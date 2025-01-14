@@ -21,7 +21,7 @@ import { drivers } from "@/data/drivers";
 import { useQuery } from "@tanstack/react-query";
 
 interface VoteCount {
-  driver_id: number;
+  first_place_driver: string;
   count: number;
 }
 
@@ -63,7 +63,7 @@ export const RacePrediction = () => {
     fetchNextRace();
   }, []);
 
-  // Fetch victory votes
+  // Fetch victory predictions
   const { data: voteCounts } = useQuery({
     queryKey: ["victoryVotes"],
     queryFn: async () => {
@@ -77,13 +77,13 @@ export const RacePrediction = () => {
 
       if (!nextRaceData) return [];
 
-      const { data: votes } = await supabase
-        .from('victory_votes')
-        .select('driver_id, count(*)')
+      const { data: predictions } = await supabase
+        .from('race_predictions')
+        .select('first_place_driver, count(*)')
         .eq('race_id', nextRaceData.id)
-        .group('driver_id');
+        .group('first_place_driver');
 
-      return votes as VoteCount[];
+      return predictions as VoteCount[];
     },
   });
 
@@ -94,7 +94,7 @@ export const RacePrediction = () => {
     const totalVotes = voteCounts.reduce((sum, vote) => sum + Number(vote.count), 0);
     
     return voteCounts.map(vote => ({
-      driverId: vote.driver_id,
+      driverId: drivers.find(d => d.name === vote.first_place_driver)?.id || 0,
       percentage: Math.round((Number(vote.count) / totalVotes) * 100),
     }));
   };
