@@ -324,39 +324,20 @@ export const RacePrediction = () => {
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-8">PARA LA VICTORIA</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm col-span-1 md:col-start-2">
                 <img 
-                  src="https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_verstappen.png" 
-                  alt="Max Verstappen" 
+                  src="https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_sainz.png" 
+                  alt="Carlos Sainz" 
                   className="w-full h-auto mb-4"
                 />
-                <h3 className="text-xl font-bold">MAX VERSTAPPEN</h3>
-                <p className="text-f1-red text-2xl font-bold">45%</p>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <img 
-                  src="https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_leclerc.png" 
-                  alt="Charles Leclerc" 
-                  className="w-full h-auto mb-4"
-                />
-                <h3 className="text-xl font-bold">CHARLES LECLERC</h3>
-                <p className="text-f1-red text-2xl font-bold">32%</p>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <img 
-                  src="https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_alonso.png" 
-                  alt="Fernando Alonso" 
-                  className="w-full h-auto mb-4"
-                />
-                <h3 className="text-xl font-bold">FERNANDO ALONSO</h3>
-                <p className="text-f1-red text-2xl font-bold">23%</p>
+                <h3 className="text-xl font-bold">CARLOS SAINZ</h3>
+                <p className="text-f1-red text-2xl font-bold">100%</p>
               </div>
             </div>
           </div>
 
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left column - Driver selection */}
               <div className="space-y-6">
                 <DriverGrid
                   selectedDriverIds={predictions.podium}
@@ -365,7 +346,6 @@ export const RacePrediction = () => {
                 />
               </div>
 
-              {/* Right column - Podium and additional predictions */}
               <div className="space-y-6">
                 <div className="grid grid-cols-3 gap-4">
                   {[2, 1, 3].map((position) => (
