@@ -18,6 +18,12 @@ import { PolePosition } from "./race-prediction/PolePosition";
 import { AdditionalPredictions } from "./race-prediction/AdditionalPredictions";
 import { SocialShare } from "./race-prediction/SocialShare";
 import { drivers } from "@/data/drivers";
+import { useQuery } from "@tanstack/react-query";
+
+interface VoteCount {
+  driver_id: number;
+  count: number;
+}
 
 export const RacePrediction = () => {
   const { toast } = useToast();
@@ -34,6 +40,7 @@ export const RacePrediction = () => {
   const [nextRace, setNextRace] = useState<{ race_date: string; race_time: string } | null>(null);
   const [canReset, setCanReset] = useState(false);
 
+  // Fetch next race
   useEffect(() => {
     const fetchNextRace = async () => {
       const { data: race, error } = await supabase
@@ -55,6 +62,44 @@ export const RacePrediction = () => {
 
     fetchNextRace();
   }, []);
+
+  // Fetch victory votes
+  const { data: voteCounts } = useQuery({
+    queryKey: ["victoryVotes"],
+    queryFn: async () => {
+      const { data: nextRaceData } = await supabase
+        .from('races')
+        .select('id')
+        .eq('status', 'scheduled')
+        .order('race_date', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (!nextRaceData) return [];
+
+      const { data: votes } = await supabase
+        .from('victory_votes')
+        .select('driver_id, count(*)')
+        .eq('race_id', nextRaceData.id)
+        .group('driver_id');
+
+      return votes as VoteCount[];
+    },
+  });
+
+  // Calculate vote percentages
+  const calculateVotePercentages = () => {
+    if (!voteCounts || voteCounts.length === 0) return [];
+
+    const totalVotes = voteCounts.reduce((sum, vote) => sum + Number(vote.count), 0);
+    
+    return voteCounts.map(vote => ({
+      driverId: vote.driver_id,
+      percentage: Math.round((Number(vote.count) / totalVotes) * 100),
+    }));
+  };
+
+  const votePercentages = calculateVotePercentages();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -324,15 +369,22 @@ export const RacePrediction = () => {
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-8">PARA LA VICTORIA</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="bg-white rounded-lg p-6 shadow-sm col-span-1 md:col-start-2">
-                <img 
-                  src="https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_sainz.png" 
-                  alt="Carlos Sainz" 
-                  className="w-full h-auto mb-4"
-                />
-                <h3 className="text-xl font-bold">CARLOS SAINZ</h3>
-                <p className="text-f1-red text-2xl font-bold">100%</p>
-              </div>
+              {votePercentages.map(({ driverId, percentage }) => {
+                const driver = drivers.find(d => d.id === driverId);
+                if (!driver) return null;
+                
+                return (
+                  <div key={driverId} className="bg-white rounded-lg p-6 shadow-sm">
+                    <img 
+                      src={`https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_${driver.name.toLowerCase().split(' ')[1]}.png`}
+                      alt={driver.name}
+                      className="w-full h-auto mb-4"
+                    />
+                    <h3 className="text-xl font-bold">{driver.name.toUpperCase()}</h3>
+                    <p className="text-f1-red text-2xl font-bold">{percentage}%</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
