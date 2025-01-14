@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 
 interface VoteCount {
   first_place_driver: string;
-  count: string;
+  count: number;
 }
 
 export const RacePrediction = () => {
@@ -118,11 +118,11 @@ export const RacePrediction = () => {
   const calculateVotePercentages = () => {
     if (!voteCounts || voteCounts.length === 0) return [];
 
-    const totalVotes = voteCounts.reduce((sum, vote) => sum + Number(vote.count), 0);
+    const totalVotes = voteCounts.reduce((sum, vote) => sum + vote.count, 0);
     
     return voteCounts.map(vote => ({
       driverId: drivers.find(d => d.name === vote.first_place_driver)?.id || 0,
-      percentage: Math.round((Number(vote.count) / totalVotes) * 100),
+      percentage: Math.round((vote.count / totalVotes) * 100),
     }));
   };
 
