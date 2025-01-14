@@ -98,7 +98,8 @@ export const RacePrediction = () => {
       const { data: predictions, error: predictionsError } = await supabase
         .from('race_predictions')
         .select('first_place_driver, count(*)')
-        .eq('race_id', nextRaceData.id);
+        .eq('race_id', nextRaceData.id)
+        .group('first_place_driver');
 
       if (predictionsError) {
         console.error("Error fetching predictions:", predictionsError);
