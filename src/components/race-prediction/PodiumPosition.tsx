@@ -39,13 +39,24 @@ export const PodiumPosition = ({
         <div className="h-48 flex items-center justify-center p-4">
           {driver ? (
             isMobile ? (
-              <div className="flex items-center justify-center w-full h-full">
-                <img
-                  src={driver.imageUrl}
-                  alt={driver.name}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+              isSelected ? (
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+                    <img
+                      src={driver.imageUrl}
+                      alt={driver.name}
+                      className="w-full h-full object-contain transform scale-[1.37]"
+                    />
+                  </div>
+                  <div className="text-lg font-bold px-4 py-2 rounded-full bg-f1-red text-white">
+                    P{position}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold text-f1-red">
+                  P{position}
+                </div>
+              )
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
