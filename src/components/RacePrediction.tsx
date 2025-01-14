@@ -323,9 +323,15 @@ export const RacePrediction = () => {
         return;
       }
 
-      const { error } = await supabase.from('race_predictions').insert({
-        user_id: user.id,
-        race_id: races.id,
+      // Check if prediction exists
+      const { data: existingPrediction } = await supabase
+        .from('race_predictions')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('race_id', races.id)
+        .single();
+
+      const predictionData = {
         pole_position_driver: drivers.find(d => d.id === predictions.pole)?.name || '',
         first_place_driver: drivers.find(d => d.id === predictions.podium[0])?.name || '',
         second_place_driver: drivers.find(d => d.id === predictions.podium[1])?.name || '',
@@ -333,22 +339,38 @@ export const RacePrediction = () => {
         had_rain: predictions.rain,
         had_dnf: predictions.dnf,
         had_safety_car: predictions.safetyCar,
-      });
+      };
+
+      let error;
+
+      if (existingPrediction) {
+        // Update existing prediction
+        const { error: updateError } = await supabase
+          .from('race_predictions')
+          .update(predictionData)
+          .eq('id', existingPrediction.id);
+        
+        error = updateError;
+      } else {
+        // Insert new prediction
+        const { error: insertError } = await supabase
+          .from('race_predictions')
+          .insert({
+            ...predictionData,
+            user_id: user.id,
+            race_id: races.id,
+          });
+        
+        error = insertError;
+      }
 
       if (error) {
-        if (error.code === '23505') {
-          toast({
-            title: "Error",
-            description: "Ya has enviado una predicción para esta carrera",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Error",
-            description: "Hubo un error al guardar tu predicción",
-            variant: "destructive",
-          });
-        }
+        console.error('Error saving prediction:', error);
+        toast({
+          title: "Error",
+          description: "Hubo un error al guardar tu predicción",
+          variant: "destructive",
+        });
         return;
       }
 
