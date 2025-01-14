@@ -30,43 +30,48 @@ export const PodiumPosition = ({
       `}>
         <div className="h-48 flex items-center justify-center p-4">
           {isMobile ? (
-            driver ? (
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
-                  <img
-                    src={driver.imageUrl}
-                    alt={driver.name}
-                    className="w-full h-full object-contain transform scale-[1.37]"
-                  />
+            <div className="flex flex-col items-center gap-4">
+              {driver ? (
+                <>
+                  <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+                    <img
+                      src={driver.imageUrl}
+                      alt={driver.name}
+                      className="w-full h-full object-contain transform scale-[1.37]"
+                    />
+                  </div>
+                  <div className="text-lg font-bold px-4 py-2 rounded-full bg-f1-dark text-white">
+                    P{position}
+                  </div>
+                </>
+              ) : (
+                <div className="text-2xl font-bold text-white bg-f1-dark px-4 py-2 rounded-full">
+                  {isSelected ? "Selecciona piloto" : `P${position}`}
                 </div>
-                <div className="text-lg font-bold px-4 py-2 rounded-full bg-f1-dark text-white">
-                  P{position}
-                </div>
-              </div>
-            ) : (
-              <div className="text-2xl font-bold text-white bg-f1-dark px-4 py-2 rounded-full">
-                {isSelected ? "Selecciona piloto" : `P${position}`}
-              </div>
-            )
+              )}
+            </div>
           ) : (
-            driver ? (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
-                  <img
-                    src={driver.imageUrl}
-                    alt={driver.name}
-                    className="w-full h-full object-contain transform scale-[1.37]"
-                  />
-                </div>
-                <div className="text-sm font-bold px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+            // Desktop version - mantiene el diseño original
+            <div className="flex flex-col items-center gap-2">
+              {driver ? (
+                <>
+                  <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+                    <img
+                      src={driver.imageUrl}
+                      alt={driver.name}
+                      className="w-full h-full object-contain transform scale-[1.37]"
+                    />
+                  </div>
+                  <div className="text-sm font-bold px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+                    P{position}
+                  </div>
+                </>
+              ) : (
+                <div className="text-2xl font-bold text-white bg-f1-dark px-4 py-2 rounded-full">
                   P{position}
                 </div>
-              </div>
-            ) : (
-              <div className="text-2xl font-bold text-white bg-f1-dark px-4 py-2 rounded-full">
-                P{position}
-              </div>
-            )
+              )}
+            </div>
           )}
         </div>
       </div>
