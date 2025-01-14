@@ -331,10 +331,7 @@ export const RacePrediction = () => {
 
               <div className="grid grid-cols-2 gap-8">
                 {/* Left column - Driver grid is handled by DriverGrid component */}
-                <div></div>
-
-                {/* Right column - Podium and additional predictions */}
-                <div className="space-y-6">
+                <div>
                   {/* Podium section */}
                   <div className="grid grid-cols-3 gap-4">
                     {[2, 1, 3].map((position) => (
@@ -347,7 +344,10 @@ export const RacePrediction = () => {
                       />
                     ))}
                   </div>
+                </div>
 
+                {/* Right column - Additional predictions */}
+                <div className="space-y-6">
                   {/* Pole Position */}
                   <PolePosition
                     selectedDriver={predictions.pole}
