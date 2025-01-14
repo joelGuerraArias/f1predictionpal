@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Race {
   id: string;
@@ -87,22 +88,34 @@ export const F1Header = () => {
   const TeamLogos = () => {
     if (isMobile) {
       return (
-        <Carousel className="w-full max-w-xs mx-auto">
+        <Carousel
+          className="w-full max-w-xs mx-auto"
+          plugins={[
+            Autoplay({
+              delay: 2000,
+            }),
+          ]}
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+        >
           <CarouselContent>
             {F1Teams.map((team) => (
-              <CarouselItem key={team.name}>
+              <CarouselItem key={team.name} className="basis-full">
                 <div className="w-full flex justify-center items-center p-4">
                   <img
                     src={team.logo}
                     alt={team.name}
                     className="w-auto h-12 object-contain"
+                    loading="eager"
                   />
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="hidden" />
+          <CarouselNext className="hidden" />
         </Carousel>
       );
     }
@@ -116,6 +129,7 @@ export const F1Header = () => {
               alt={team.name}
               className="w-full h-auto object-contain"
               style={{ maxHeight: "50px" }}
+              loading="eager"
             />
           </div>
         ))}
