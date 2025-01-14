@@ -30,18 +30,23 @@ export const PodiumPosition = ({
 
       {/* Main container */}
       <div className={`
-        relative bg-[#8E9196]/10 rounded-2xl overflow-hidden
+        relative bg-[#8E9196]/10 rounded-2xl overflow-hidden cursor-pointer
         ${isSelected ? "ring-2 ring-f1-red" : ""}
       `}>
         {/* Driver image container */}
         <div className="h-48 flex items-center justify-center p-4">
           {driver ? (
-            <div className="flex items-center justify-center w-full h-full">
-              <img
-                src={driver.imageUrl}
-                alt={driver.name}
-                className="w-full h-full object-contain"
-              />
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+                <img
+                  src={driver.imageUrl}
+                  alt={driver.name}
+                  className="w-full h-full object-contain transform scale-[1.37]"
+                />
+              </div>
+              <div className="text-sm font-bold px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+                P{position}
+              </div>
             </div>
           ) : (
             <span className="text-gray-400">
