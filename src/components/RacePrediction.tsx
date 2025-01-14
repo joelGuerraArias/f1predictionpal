@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 
 interface VoteCount {
   first_place_driver: string;
-  count: number;
+  count: string;
 }
 
 export const RacePrediction = () => {
@@ -43,6 +43,7 @@ export const RacePrediction = () => {
   // Fetch next race
   useEffect(() => {
     const fetchNextRace = async () => {
+      console.log("Fetching next race...");
       const { data: race, error } = await supabase
         .from('races')
         .select('race_date, race_time')
@@ -51,7 +52,13 @@ export const RacePrediction = () => {
         .limit(1)
         .single();
 
+      if (error) {
+        console.error("Error fetching next race:", error);
+        return;
+      }
+
       if (race) {
+        console.log("Next race found:", race);
         setNextRace(race);
         const raceDateTime = new Date(`${race.race_date}T${race.race_time}`);
         const now = new Date();
@@ -67,7 +74,8 @@ export const RacePrediction = () => {
   const { data: voteCounts } = useQuery({
     queryKey: ["victoryVotes"],
     queryFn: async () => {
-      const { data: nextRaceData } = await supabase
+      console.log("Fetching victory votes...");
+      const { data: nextRaceData, error: raceError } = await supabase
         .from('races')
         .select('id')
         .eq('status', 'scheduled')
@@ -75,17 +83,30 @@ export const RacePrediction = () => {
         .limit(1)
         .single();
 
-      if (!nextRaceData) return [];
+      if (raceError) {
+        console.error("Error fetching next race for votes:", raceError);
+        return [];
+      }
 
-      const { data: predictions } = await supabase
+      if (!nextRaceData) {
+        console.log("No next race found for votes");
+        return [];
+      }
+
+      console.log("Found next race for votes:", nextRaceData);
+
+      const { data: predictions, error: predictionsError } = await supabase
         .from('race_predictions')
-        .select(`
-          first_place_driver,
-          count(*)
-        `)
+        .select('first_place_driver, count(*)')
         .eq('race_id', nextRaceData.id)
-        .group('first_place_driver');
+        .groupBy('first_place_driver');
 
+      if (predictionsError) {
+        console.error("Error fetching predictions:", predictionsError);
+        return [];
+      }
+
+      console.log("Fetched predictions:", predictions);
       return predictions as VoteCount[];
     },
   });
