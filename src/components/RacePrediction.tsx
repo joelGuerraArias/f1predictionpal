@@ -377,7 +377,10 @@ export const RacePrediction = () => {
                   {isSubmitting ? "ENVIANDO..." : "ENVIAR"}
                 </Button>
 
-                <SocialShare />
+                <SocialShare 
+                  podium={predictions.podium}
+                  pole={predictions.pole}
+                />
               </div>
             </div>
           </DndContext>
