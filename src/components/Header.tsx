@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { UserProfile } from "./UserProfile";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export const Header = () => {
           <span className="text-f1-red">/F1</span>
         </div>
       </div>
-      <nav className="hidden md:flex items-center space-x-4">
+      <nav className="flex items-center space-x-4">
         <Button variant="ghost" className="text-gray-800">P1</Button>
         <Button variant="ghost" className="text-gray-800">P2</Button>
         <Button variant="ghost" className="text-gray-800">P3</Button>
@@ -44,6 +45,7 @@ export const Header = () => {
             ADMIN
           </Button>
         )}
+        <UserProfile />
         <Button onClick={handleLogout} className="bg-f1-red hover:bg-red-700 text-white">
           CERRAR SESIÓN
         </Button>
