@@ -102,7 +102,7 @@ export const RacePrediction = () => {
           count(*) as count
         `)
         .eq('race_id', nextRaceData.id)
-        .group('first_place_driver');
+        .select('first_place_driver, count');
 
       if (predictionsError) {
         console.error("Error fetching predictions:", predictionsError);
