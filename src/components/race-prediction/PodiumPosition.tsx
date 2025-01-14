@@ -1,4 +1,5 @@
 import { drivers } from "@/data/drivers";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PodiumPositionProps {
   position: number;
@@ -13,6 +14,7 @@ export const PodiumPosition = ({
   isSelected,
   onPositionClick,
 }: PodiumPositionProps) => {
+  const isMobile = useIsMobile();
   const positionText = position === 1 ? "PRIMERO" : position === 2 ? "SEGUNDO" : "TERCERO";
   const driver = driverId ? drivers.find(d => d.id === driverId) : null;
 
@@ -36,18 +38,28 @@ export const PodiumPosition = ({
         {/* Driver image container */}
         <div className="h-48 flex items-center justify-center p-4">
           {driver ? (
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+            isMobile ? (
+              <div className="flex items-center justify-center w-full h-full">
                 <img
                   src={driver.imageUrl}
                   alt={driver.name}
-                  className="w-full h-full object-contain transform scale-[1.37]"
+                  className="w-full h-full object-contain"
                 />
               </div>
-              <div className="text-sm font-bold px-3 py-1 rounded-full bg-gray-200 text-gray-700">
-                P{position}
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-red-50 border-2 border-f1-red">
+                  <img
+                    src={driver.imageUrl}
+                    alt={driver.name}
+                    className="w-full h-full object-contain transform scale-[1.37]"
+                  />
+                </div>
+                <div className="text-sm font-bold px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+                  P{position}
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <span className="text-gray-400">
               {isSelected ? "Selecciona un piloto" : "Arrastra o selecciona"}
