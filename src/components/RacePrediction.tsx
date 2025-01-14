@@ -99,7 +99,7 @@ export const RacePrediction = () => {
         .from('race_predictions')
         .select(`
           first_place_driver,
-          count(*)
+          count(*) as count
         `)
         .eq('race_id', nextRaceData.id)
         .group('first_place_driver');
