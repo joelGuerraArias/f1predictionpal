@@ -38,7 +38,7 @@ export const DriverGrid = ({
                   onClick={() => onDriverClick(driver.id)}
                 >
                   <div className="flex flex-col">
-                    <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.25)' }}>
+                    <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.37)' }}>
                       <img
                         src={driver.imageUrl}
                         alt={driver.name}
@@ -79,7 +79,7 @@ export const DriverGrid = ({
             onClick={() => onDriverClick(driver.id)}
           >
             <div className="flex flex-col">
-              <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.25)' }}>
+              <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.37)' }}>
                 <img
                   src={driver.imageUrl}
                   alt={driver.name}
