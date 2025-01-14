@@ -322,65 +322,67 @@ export const RacePrediction = () => {
           </div>
 
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left column - Driver selection */}
-              <div className="space-y-6">
-                <DriverGrid
-                  selectedDriverIds={predictions.podium}
-                  polePositionDriver={predictions.pole}
-                  onDriverClick={handleDriverClick}
-                />
-              </div>
+            <div className="space-y-8">
+              <DriverGrid
+                selectedDriverIds={predictions.podium}
+                polePositionDriver={predictions.pole}
+                onDriverClick={handleDriverClick}
+              />
 
-              {/* Right column - Podium and additional predictions */}
-              <div className="space-y-6">
-                <div className="grid grid-cols-3 gap-4">
-                  {[2, 1, 3].map((position) => (
-                    <PodiumPosition
-                      key={position}
-                      position={position}
-                      driverId={predictions.podium[position - 1] || null}
-                      isSelected={selectedPosition === position}
-                      onPositionClick={() => setSelectedPosition(position)}
-                    />
-                  ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Left column - Additional predictions */}
+                <div className="space-y-6">
+                  <PolePosition
+                    selectedDriver={predictions.pole}
+                    isSelecting={selectingPole}
+                    onPoleClick={() => setSelectingPole(!selectingPole)}
+                  />
+
+                  <AdditionalPredictions
+                    rain={predictions.rain}
+                    dnf={predictions.dnf}
+                    safetyCar={predictions.safetyCar}
+                    onPredictionChange={handlePredictionChange}
+                  />
                 </div>
 
-                <Button
-                  variant="outline"
-                  onClick={handleReset}
-                  disabled={!canReset}
-                  className="flex items-center gap-2 w-full"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  Resetear predicción
-                </Button>
+                {/* Right column - Podium */}
+                <div className="space-y-6">
+                  <div className="grid grid-cols-3 gap-4">
+                    {[2, 1, 3].map((position) => (
+                      <PodiumPosition
+                        key={position}
+                        position={position}
+                        driverId={predictions.podium[position - 1] || null}
+                        isSelected={selectedPosition === position}
+                        onPositionClick={() => setSelectedPosition(position)}
+                      />
+                    ))}
+                  </div>
 
-                <PolePosition
-                  selectedDriver={predictions.pole}
-                  isSelecting={selectingPole}
-                  onPoleClick={() => setSelectingPole(!selectingPole)}
-                />
+                  <Button
+                    variant="outline"
+                    onClick={handleReset}
+                    disabled={!canReset}
+                    className="flex items-center gap-2 w-full"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    Resetear predicción
+                  </Button>
 
-                <AdditionalPredictions
-                  rain={predictions.rain}
-                  dnf={predictions.dnf}
-                  safetyCar={predictions.safetyCar}
-                  onPredictionChange={handlePredictionChange}
-                />
+                  <Button 
+                    className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "ENVIANDO..." : "ENVIAR"}
+                  </Button>
 
-                <Button 
-                  className="w-full bg-f1-red hover:bg-red-700 text-white py-3 rounded-lg font-bold"
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "ENVIANDO..." : "ENVIAR"}
-                </Button>
-
-                <SocialShare 
-                  podium={predictions.podium}
-                  pole={predictions.pole}
-                />
+                  <SocialShare 
+                    podium={predictions.podium}
+                    pole={predictions.pole}
+                  />
+                </div>
               </div>
             </div>
           </DndContext>

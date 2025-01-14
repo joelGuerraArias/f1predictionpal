@@ -21,18 +21,26 @@ export const DriverGrid = ({
 }: DriverGridProps) => {
   const isMobile = useIsMobile();
 
+  // Simulated voting data - in a real app, this would come from your database
   const topVotedDrivers = [
-    { name: "MAX VERSTAPPEN", percentage: "100", imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_verstappen.png" },
-    { name: "CHARLES LECLERC", percentage: "75", imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_leclerc.png" },
-    { name: "FERNANDO ALONSO", percentage: "50", imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_alonso.png" },
+    { name: "MAX VERSTAPPEN", votes: 10, imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_verstappen.png" },
+    { name: "CHARLES LECLERC", votes: 7, imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_leclerc.png" },
+    { name: "FERNANDO ALONSO", votes: 5, imageUrl: "https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_alonso.png" },
   ];
 
+  // Calculate total votes and percentages
+  const totalVotes = topVotedDrivers.reduce((sum, driver) => sum + driver.votes, 0);
+  const driversWithPercentages = topVotedDrivers.map(driver => ({
+    ...driver,
+    percentage: Math.round((driver.votes / totalVotes) * 100)
+  }));
+
   const TopVotedSection = () => (
-    <div className="w-full max-w-4xl mx-auto mb-12">
+    <div className="w-full mb-12 bg-gray-50 py-8 rounded-xl">
       <h3 className="text-2xl font-bold mb-8 text-center uppercase">PARA LA VICTORIA</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {topVotedDrivers.map((driver) => (
-          <div key={driver.name} className="bg-white border border-gray-200 rounded-xl p-6 transform hover:scale-105 transition-transform duration-200">
+      <div className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto px-4">
+        {driversWithPercentages.map((driver) => (
+          <div key={driver.name} className="bg-white border border-gray-200 rounded-xl p-6 transform hover:scale-105 transition-transform duration-200 w-[280px]">
             <div className="flex flex-col items-center space-y-4">
               <img
                 src={driver.imageUrl}
@@ -41,7 +49,7 @@ export const DriverGrid = ({
               />
               <div className="text-center">
                 <div className="font-bold text-lg">{driver.name}</div>
-                <div className="text-f1-red font-bold text-xl">{driver.percentage} %</div>
+                <div className="text-f1-red font-bold text-xl">{driver.percentage}%</div>
               </div>
             </div>
           </div>
@@ -97,7 +105,7 @@ export const DriverGrid = ({
   }
 
   return (
-    <div className="space-y-12">
+    <div>
       <TopVotedSection />
       <div className="grid grid-cols-3 gap-6">
         {drivers.map((driver) => {
