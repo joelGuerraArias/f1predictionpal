@@ -28,20 +28,20 @@ export const DriverGrid = ({
   ];
 
   const TopVotedSection = () => (
-    <div className="mb-8">
-      <h3 className="text-lg font-bold mb-4 uppercase">PARA LA VICTORIA</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="w-full max-w-4xl mx-auto mb-12">
+      <h3 className="text-2xl font-bold mb-8 text-center uppercase">PARA LA VICTORIA</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {topVotedDrivers.map((driver) => (
-          <div key={driver.name} className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center space-x-4">
+          <div key={driver.name} className="bg-white border border-gray-200 rounded-xl p-6 transform hover:scale-105 transition-transform duration-200">
+            <div className="flex flex-col items-center space-y-4">
               <img
                 src={driver.imageUrl}
                 alt={driver.name}
-                className="w-20 h-20 object-cover rounded-full"
+                className="w-32 h-32 object-contain"
               />
-              <div>
-                <div className="font-bold">{driver.name}</div>
-                <div className="text-f1-red font-bold">{driver.percentage} %</div>
+              <div className="text-center">
+                <div className="font-bold text-lg">{driver.name}</div>
+                <div className="text-f1-red font-bold text-xl">{driver.percentage} %</div>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ export const DriverGrid = ({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <TopVotedSection />
       <div className="grid grid-cols-3 gap-6">
         {drivers.map((driver) => {
