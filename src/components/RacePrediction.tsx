@@ -97,7 +97,10 @@ export const RacePrediction = () => {
 
       const { data: predictions, error: predictionsError } = await supabase
         .from('race_predictions')
-        .select('first_place_driver, count(*)')
+        .select(`
+          first_place_driver,
+          count(*)
+        `)
         .eq('race_id', nextRaceData.id)
         .group('first_place_driver');
 
