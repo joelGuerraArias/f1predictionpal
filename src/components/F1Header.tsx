@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface Race {
   id: string;
@@ -29,6 +37,7 @@ export const F1Header = () => {
     minutes: 0,
     seconds: 0,
   });
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchNextRace = async () => {
@@ -75,6 +84,45 @@ export const F1Header = () => {
     return () => clearInterval(timer);
   }, [nextRace]);
 
+  const TeamLogos = () => {
+    if (isMobile) {
+      return (
+        <Carousel className="w-full max-w-xs mx-auto">
+          <CarouselContent>
+            {F1Teams.map((team) => (
+              <CarouselItem key={team.name}>
+                <div className="w-full flex justify-center items-center p-4">
+                  <img
+                    src={team.logo}
+                    alt={team.name}
+                    className="w-auto h-12 object-contain"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      );
+    }
+
+    return (
+      <div className="flex flex-wrap justify-center items-center gap-8">
+        {F1Teams.map((team) => (
+          <div key={team.name} className="w-32">
+            <img
+              src={team.logo}
+              alt={team.name}
+              className="w-full h-auto object-contain"
+              style={{ maxHeight: "50px" }}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full bg-white">
       <div className="container mx-auto px-4 py-6">
@@ -112,18 +160,7 @@ export const F1Header = () => {
         )}
 
         {/* Logos de equipos */}
-        <div className="flex flex-wrap justify-center items-center gap-8">
-          {F1Teams.map((team) => (
-            <div key={team.name} className="w-32">
-              <img
-                src={team.logo}
-                alt={team.name}
-                className="w-full h-auto object-contain"
-                style={{ maxHeight: "50px" }}
-              />
-            </div>
-          ))}
-        </div>
+        <TeamLogos />
       </div>
     </div>
   );
