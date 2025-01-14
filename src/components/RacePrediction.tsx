@@ -329,25 +329,13 @@ export const RacePrediction = () => {
                 onDriverClick={handleDriverClick}
               />
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left column - Additional predictions */}
-                <div className="space-y-6">
-                  <PolePosition
-                    selectedDriver={predictions.pole}
-                    isSelecting={selectingPole}
-                    onPoleClick={() => setSelectingPole(!selectingPole)}
-                  />
+              <div className="grid grid-cols-2 gap-8">
+                {/* Left column - Driver grid is handled by DriverGrid component */}
+                <div></div>
 
-                  <AdditionalPredictions
-                    rain={predictions.rain}
-                    dnf={predictions.dnf}
-                    safetyCar={predictions.safetyCar}
-                    onPredictionChange={handlePredictionChange}
-                  />
-                </div>
-
-                {/* Right column - Podium */}
+                {/* Right column - Podium and additional predictions */}
                 <div className="space-y-6">
+                  {/* Podium section */}
                   <div className="grid grid-cols-3 gap-4">
                     {[2, 1, 3].map((position) => (
                       <PodiumPosition
@@ -360,6 +348,22 @@ export const RacePrediction = () => {
                     ))}
                   </div>
 
+                  {/* Pole Position */}
+                  <PolePosition
+                    selectedDriver={predictions.pole}
+                    isSelecting={selectingPole}
+                    onPoleClick={() => setSelectingPole(!selectingPole)}
+                  />
+
+                  {/* Additional Predictions */}
+                  <AdditionalPredictions
+                    rain={predictions.rain}
+                    dnf={predictions.dnf}
+                    safetyCar={predictions.safetyCar}
+                    onPredictionChange={handlePredictionChange}
+                  />
+
+                  {/* Action Buttons */}
                   <Button
                     variant="outline"
                     onClick={handleReset}
