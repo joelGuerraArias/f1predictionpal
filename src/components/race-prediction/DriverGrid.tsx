@@ -36,11 +36,11 @@ export const DriverGrid = ({
   }));
 
   const TopVotedSection = () => (
-    <div className="w-full mb-12 bg-gray-50 py-8 rounded-xl">
+    <div className="w-full mb-8 bg-gray-50 py-8 rounded-xl">
       <h3 className="text-2xl font-bold mb-8 text-center uppercase">PARA LA VICTORIA</h3>
-      <div className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto px-4">
+      <div className="flex justify-center gap-8 max-w-5xl mx-auto px-4">
         {driversWithPercentages.map((driver) => (
-          <div key={driver.name} className="bg-white border border-gray-200 rounded-xl p-6 transform hover:scale-105 transition-transform duration-200 w-[280px]">
+          <div key={driver.name} className="bg-white border border-gray-200 rounded-xl p-6 transform hover:scale-105 transition-transform duration-200">
             <div className="flex flex-col items-center space-y-4">
               <img
                 src={driver.imageUrl}
@@ -77,7 +77,7 @@ export const DriverGrid = ({
                     onClick={() => onDriverClick(driver.id)}
                   >
                     <div className="flex flex-col">
-                      <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.37)' }}>
+                      <div className="aspect-square overflow-hidden rounded-lg">
                         <img
                           src={driver.imageUrl}
                           alt={driver.name}
@@ -105,9 +105,9 @@ export const DriverGrid = ({
   }
 
   return (
-    <div>
+    <div className="space-y-8">
       <TopVotedSection />
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-4">
         {drivers.map((driver) => {
           const isSelected = selectedDriverIds.includes(driver.id) || polePositionDriver === driver.id;
           return (
@@ -121,7 +121,7 @@ export const DriverGrid = ({
               onClick={() => onDriverClick(driver.id)}
             >
               <div className="flex flex-col">
-                <div className="aspect-square overflow-hidden rounded-lg m-3" style={{ transform: 'scale(1.37)' }}>
+                <div className="aspect-square overflow-hidden rounded-lg">
                   <img
                     src={driver.imageUrl}
                     alt={driver.name}
