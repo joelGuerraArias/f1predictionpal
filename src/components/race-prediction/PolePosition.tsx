@@ -15,31 +15,38 @@ export const PolePosition = ({
   const driver = selectedDriver ? drivers.find(d => d.id === selectedDriver) : null;
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <h4 className="flex items-center text-f1-red font-bold mb-2">
-        <Flag className="mr-2 h-4 w-4" />
-        POLE POSITION
-      </h4>
-      <div 
-        className={`h-16 bg-white border border-gray-200 rounded-lg flex items-center justify-center cursor-pointer hover:border-f1-red transition-colors ${isSelecting ? 'ring-2 ring-f1-red' : ''}`}
-        onClick={onPoleClick}
-      >
-        {driver ? (
-          <div className="flex items-center gap-2">
-            <img
-              src={driver.imageUrl}
-              alt="Pole position driver"
-              className="h-12 w-12 object-contain transform scale-125"
-            />
-            <span className="text-sm font-medium">
-              {driver.name}
+    <div className="relative" onClick={onPoleClick}>
+      {/* Position badge */}
+      <div className="absolute top-2 left-2 bg-f1-dark text-white font-bold w-8 h-8 flex items-center justify-center rounded-lg z-10">
+        <Flag className="h-4 w-4" />
+      </div>
+
+      {/* Main container */}
+      <div className={`
+        relative bg-[#8E9196]/10 rounded-2xl overflow-hidden
+        ${isSelecting ? "ring-2 ring-f1-red" : ""}
+      `}>
+        {/* Driver image container */}
+        <div className="h-48 flex items-center justify-center p-4">
+          {driver ? (
+            <div className="flex items-center justify-center w-full h-full">
+              <img
+                src={driver.imageUrl}
+                alt={driver.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          ) : (
+            <span className="text-gray-400">
+              {isSelecting ? "Selecciona un piloto" : "Seleccionar piloto"}
             </span>
-          </div>
-        ) : (
-          <span className="text-gray-400">
-            {isSelecting ? "Selecciona un piloto" : "Seleccionar piloto"}
-          </span>
-        )}
+          )}
+        </div>
+
+        {/* Position text banner */}
+        <div className="bg-f1-red text-white font-bold py-2 text-center">
+          POLE POSITION
+        </div>
       </div>
     </div>
   );
