@@ -23,6 +23,11 @@ export const PodiumPosition = ({
       }`}
       onClick={onPositionClick}
     >
+      {/* Position indicator */}
+      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-1 text-sm font-bold rounded z-20">
+        P{position}
+      </div>
+
       {/* Position number badge */}
       <div className="absolute top-2 left-2 bg-f1-dark text-white font-bold w-8 h-8 flex items-center justify-center rounded-lg z-10">
         {position}
