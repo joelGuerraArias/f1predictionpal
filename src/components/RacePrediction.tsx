@@ -433,11 +433,14 @@ export const RacePrediction = () => {
                 
                 return (
                   <div key={driverId} className="bg-white rounded-lg p-6 shadow-sm">
-                    <img 
-                      src={`https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_${driver.name.toLowerCase().split(' ')[1]}.png`}
-                      alt={driver.name}
-                      className="w-full h-auto mb-4"
-                    />
+                    <div className="relative w-48 h-48 mx-auto mb-4">
+                      <img 
+                        src={`https://fgjpullzone.b-cdn.net/f1/para%20victoria/race_${driver.name.toLowerCase().split(' ')[1]}.png`}
+                        alt={driver.name}
+                        className="w-full h-full object-cover rounded-full border-5 border-f1-red"
+                        style={{ borderWidth: '5px' }}
+                      />
+                    </div>
                     <h3 className="text-xl font-bold">{driver.name.toUpperCase()}</h3>
                     <p className="text-f1-red text-2xl font-bold">{percentage}%</p>
                   </div>
