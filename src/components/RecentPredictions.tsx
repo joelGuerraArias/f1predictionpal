@@ -88,10 +88,30 @@ export const RecentPredictions = () => {
                   <Flag className="h-4 w-4 text-gray-400" />
                 )}
               </div>
-              <div className="font-bold">{prediction.first_place_driver}</div>
-              <div className="font-bold">{prediction.second_place_driver}</div>
-              <div className="font-bold">{prediction.third_place_driver}</div>
-              <div className="font-bold">{prediction.pole_position_driver}</div>
+              <div className="relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+                  P1
+                </div>
+                <div className="font-bold">{prediction.first_place_driver}</div>
+              </div>
+              <div className="relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+                  P2
+                </div>
+                <div className="font-bold">{prediction.second_place_driver}</div>
+              </div>
+              <div className="relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+                  P3
+                </div>
+                <div className="font-bold">{prediction.third_place_driver}</div>
+              </div>
+              <div className="relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+                  POLE
+                </div>
+                <div className="font-bold">{prediction.pole_position_driver}</div>
+              </div>
               <div className="flex gap-2 font-bold">
                 {prediction.had_rain && <span>Lluvia</span>}
                 {prediction.had_safety_car && <span>SC</span>}
