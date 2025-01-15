@@ -16,6 +16,7 @@ type PredictionWithUser = {
   user_id: string;
   profiles: {
     email: string | null;
+    name: string | null;
     country: string | null;
   };
   races: {
@@ -40,6 +41,7 @@ export const RecentPredictions = () => {
           ),
           profiles (
             email,
+            name,
             country
           )
         `)
@@ -53,6 +55,7 @@ export const RecentPredictions = () => {
         ...prediction,
         profiles: {
           email: prediction.profiles?.email || null,
+          name: prediction.profiles?.name || null,
           country: prediction.profiles?.country || null
         }
       })) as PredictionWithUser[];
@@ -73,7 +76,7 @@ export const RecentPredictions = () => {
             <div className="grid grid-cols-6 gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {prediction.profiles?.email?.split('@')[0]}
+                  {prediction.profiles?.name || prediction.profiles?.email?.split('@')[0] || "Usuario"}
                 </span>
                 {prediction.profiles?.country ? (
                   <img
