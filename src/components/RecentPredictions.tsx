@@ -88,29 +88,29 @@ export const RecentPredictions = () => {
                   <Flag className="h-4 w-4 text-gray-400" />
                 )}
               </div>
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+              <div className="relative text-center">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded mb-4">
                   P1
                 </div>
-                <div className="font-bold">{prediction.first_place_driver}</div>
+                <div className="font-bold mt-4">{prediction.first_place_driver}</div>
               </div>
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+              <div className="relative text-center">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded mb-4">
                   P2
                 </div>
-                <div className="font-bold">{prediction.second_place_driver}</div>
+                <div className="font-bold mt-4">{prediction.second_place_driver}</div>
               </div>
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+              <div className="relative text-center">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded mb-4">
                   P3
                 </div>
-                <div className="font-bold">{prediction.third_place_driver}</div>
+                <div className="font-bold mt-4">{prediction.third_place_driver}</div>
               </div>
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded">
+              <div className="relative text-center">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-0.5 text-xs font-bold rounded mb-4">
                   POLE
                 </div>
-                <div className="font-bold">{prediction.pole_position_driver}</div>
+                <div className="font-bold mt-4">{prediction.pole_position_driver}</div>
               </div>
               <div className="flex gap-2 font-bold">
                 {prediction.had_rain && <span>Lluvia</span>}
