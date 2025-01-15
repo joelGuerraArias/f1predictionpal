@@ -512,4 +512,3 @@ export const RacePrediction = () => {
     </div>
   );
 };
-});
