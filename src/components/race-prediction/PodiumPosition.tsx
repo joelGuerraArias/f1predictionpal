@@ -28,11 +28,6 @@ export const PodiumPosition = ({
         P{position}
       </div>
 
-      {/* Position number badge */}
-      <div className="absolute top-2 left-2 bg-f1-dark text-white font-bold w-8 h-8 flex items-center justify-center rounded-lg z-10">
-        {position}
-      </div>
-
       {/* Main container */}
       <div className={`
         relative bg-[#8E9196]/10 rounded-2xl overflow-hidden

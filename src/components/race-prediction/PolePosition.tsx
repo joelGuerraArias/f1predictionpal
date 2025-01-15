@@ -7,11 +7,7 @@ interface PolePositionProps {
   onPoleClick: () => void;
 }
 
-export const PolePosition = ({
-  selectedDriver,
-  isSelecting,
-  onPoleClick,
-}: PolePositionProps) => {
+export const PolePosition = ({ selectedDriver, isSelecting, onPoleClick }: PolePositionProps) => {
   const driver = selectedDriver ? drivers.find(d => d.id === selectedDriver) : null;
 
   return (
@@ -19,11 +15,6 @@ export const PolePosition = ({
       {/* Position indicator */}
       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-f1-red text-white px-2 py-1 text-sm font-bold rounded z-20">
         POLE
-      </div>
-
-      {/* Position badge */}
-      <div className="absolute top-2 left-2 bg-f1-dark text-white font-bold w-8 h-8 flex items-center justify-center rounded-lg z-10">
-        <Flag className="h-4 w-4" />
       </div>
 
       {/* Main container */}
@@ -43,7 +34,7 @@ export const PolePosition = ({
             </div>
           ) : (
             <span className="text-gray-400">
-              {isSelecting ? "Selecciona un piloto" : "Seleccionar piloto"}
+              {isSelecting ? "Selecciona un piloto" : "Arrastra o selecciona"}
             </span>
           )}
         </div>
