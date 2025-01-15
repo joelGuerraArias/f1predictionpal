@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { Flag } from "lucide-react";
 
 type PredictionWithUser = {
   id: string;
@@ -15,6 +16,7 @@ type PredictionWithUser = {
   user_id: string;
   profiles: {
     email: string | null;
+    country: string | null;
   };
   races: {
     title: string;
@@ -37,7 +39,8 @@ export const RecentPredictions = () => {
             race_date
           ),
           profiles (
-            email
+            email,
+            country
           )
         `)
         .order("created_at", { ascending: false })
@@ -49,7 +52,8 @@ export const RecentPredictions = () => {
       return data.map(prediction => ({
         ...prediction,
         profiles: {
-          email: prediction.profiles?.email || null
+          email: prediction.profiles?.email || null,
+          country: prediction.profiles?.country || null
         }
       })) as PredictionWithUser[];
     },
@@ -58,7 +62,7 @@ export const RecentPredictions = () => {
   if (isLoading) return <div>Cargando predicciones...</div>;
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8">
+    <div className="w-full mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Predicciones Recientes</h2>
       <div className="space-y-4">
         {predictions?.map((prediction) => (
@@ -67,14 +71,25 @@ export const RecentPredictions = () => {
             className="bg-white shadow rounded-lg p-4 border border-gray-200"
           >
             <div className="grid grid-cols-6 gap-4 text-sm">
-              <div className="font-medium">
-                {prediction.profiles?.email?.split('@')[0]}
+              <div className="flex items-center gap-2">
+                <span className="font-medium">
+                  {prediction.profiles?.email?.split('@')[0]}
+                </span>
+                {prediction.profiles?.country ? (
+                  <img
+                    src={`https://flagcdn.com/24x18/${prediction.profiles.country.toLowerCase()}.png`}
+                    alt={prediction.profiles.country}
+                    className="h-4"
+                  />
+                ) : (
+                  <Flag className="h-4 w-4 text-gray-400" />
+                )}
               </div>
-              <div>{prediction.first_place_driver}</div>
-              <div>{prediction.second_place_driver}</div>
-              <div>{prediction.third_place_driver}</div>
-              <div>{prediction.pole_position_driver}</div>
-              <div className="flex gap-2">
+              <div className="font-bold">{prediction.first_place_driver}</div>
+              <div className="font-bold">{prediction.second_place_driver}</div>
+              <div className="font-bold">{prediction.third_place_driver}</div>
+              <div className="font-bold">{prediction.pole_position_driver}</div>
+              <div className="flex gap-2 font-bold">
                 {prediction.had_rain && <span>Lluvia</span>}
                 {prediction.had_safety_car && <span>SC</span>}
                 {prediction.had_dnf && <span>DNF</span>}
