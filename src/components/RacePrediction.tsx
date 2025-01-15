@@ -97,7 +97,7 @@ export const RacePrediction = () => {
 
       const { data, error } = await supabase
         .from('race_predictions')
-        .select('first_place_driver, count')
+        .select('first_place_driver')
         .eq('race_id', nextRaceData.id);
 
       if (error) {
@@ -512,3 +512,4 @@ export const RacePrediction = () => {
     </div>
   );
 };
+});
