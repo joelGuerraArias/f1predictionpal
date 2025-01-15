@@ -51,7 +51,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-f1-dark flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <h2 className="text-2xl font-bold tracking-wider">
@@ -65,7 +65,7 @@ const Login = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-[#222222] py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-f1-gray py-8 px-4 shadow sm:rounded-lg sm:px-10">
           {errorMessage && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{errorMessage}</AlertDescription>
@@ -80,13 +80,13 @@ const Login = () => {
                   colors: {
                     brand: '#E10600',
                     brandAccent: '#cc0600',
-                    inputBackground: 'black',
+                    inputBackground: '#15151E',
                     inputText: 'white',
                     inputPlaceholder: '#666',
-                    inputBorder: '#333',
+                    inputBorder: '#38383f',
                     inputBorderHover: '#444',
                     inputBorderFocus: '#E10600',
-                    dividerBackground: '#333',
+                    dividerBackground: '#38383f',
                   },
                 },
               },
@@ -94,7 +94,7 @@ const Login = () => {
                 container: 'text-white',
                 label: 'text-white',
                 button: 'bg-f1-red hover:bg-red-700 text-white',
-                input: 'bg-black border-[#333] text-white',
+                input: 'bg-f1-dark border-f1-gray text-white',
               }
             }}
             theme="dark"
