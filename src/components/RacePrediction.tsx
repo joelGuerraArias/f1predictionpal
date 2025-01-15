@@ -95,19 +95,31 @@ export const RacePrediction = () => {
 
       console.log("Found next race for votes:", nextRaceData);
 
-      const { data: predictions, error: predictionsError } = await supabase
+      const { data, error } = await supabase
         .from('race_predictions')
-        .select('first_place_driver, count(*)')
-        .eq('race_id', nextRaceData.id)
-        .group('first_place_driver');
+        .select('first_place_driver, count')
+        .eq('race_id', nextRaceData.id);
 
-      if (predictionsError) {
-        console.error("Error fetching predictions:", predictionsError);
+      if (error) {
+        console.error("Error fetching predictions:", error);
         return [];
       }
 
-      console.log("Fetched predictions:", predictions);
-      return predictions as VoteCount[];
+      // Process the data to count predictions
+      const predictionCounts: { [key: string]: number } = {};
+      data.forEach(prediction => {
+        const driver = prediction.first_place_driver;
+        predictionCounts[driver] = (predictionCounts[driver] || 0) + 1;
+      });
+
+      // Convert to array format
+      const counts: VoteCount[] = Object.entries(predictionCounts).map(([driver, count]) => ({
+        first_place_driver: driver,
+        count
+      }));
+
+      console.log("Processed predictions:", counts);
+      return counts;
     },
   });
 
