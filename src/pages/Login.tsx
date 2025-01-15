@@ -17,7 +17,8 @@ const Login = () => {
         if (event === "SIGNED_IN" && session) {
           // Check if user has a profile in f1.profiles
           const { data: profile, error: profileError } = await supabase
-            .from('f1.profiles')
+            .schema('f1')
+            .from('profiles')
             .select('*')
             .eq('id', session.user.id)
             .single();
@@ -25,7 +26,8 @@ const Login = () => {
           if (profileError && profileError.code === 'PGRST116') {
             // Profile doesn't exist, create it
             const { error: insertError } = await supabase
-              .from('f1.profiles')
+              .schema('f1')
+              .from('profiles')
               .insert([
                 { 
                   id: session.user.id,
