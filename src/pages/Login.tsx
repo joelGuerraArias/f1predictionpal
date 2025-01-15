@@ -15,6 +15,31 @@ const Login = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session) {
+          // Check if user has a profile in f1.profiles
+          const { data: profile, error: profileError } = await supabase
+            .from('f1.profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profileError && profileError.code === 'PGRST116') {
+            // Profile doesn't exist, create it
+            const { error: insertError } = await supabase
+              .from('f1.profiles')
+              .insert([
+                { 
+                  id: session.user.id,
+                  email: session.user.email
+                }
+              ]);
+
+            if (insertError) {
+              console.error('Error creating f1 profile:', insertError);
+              setErrorMessage("Error al crear el perfil de usuario");
+              return;
+            }
+          }
+
           navigate("/");
         }
         if (event === "USER_UPDATED") {
